@@ -10,10 +10,12 @@ public:
 	~CCtrl();
 
 	bool InitCMD();
-
-	CTanker cT[3];
+	int Go(int index = 1);
+	
+	CTanker cT[8];
 private:
-	CView* PV;
-	CMap* PM;
-	COORD _maxXY;
+	CView*	PV;
+	CMap*	PM;
+	COORD	_maxXY;
+	byte	_tanks = 0x04;
 };

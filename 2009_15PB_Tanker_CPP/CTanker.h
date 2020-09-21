@@ -26,6 +26,7 @@ public:
 		return this->_dir;
 	};
 	COORD GetOldXY() { return _oxy; };
+	byte GetTid() { return _tid; };
 	bool TryMove(byte dir = NULL);
 	bool CheckMap();
 	bool Move();

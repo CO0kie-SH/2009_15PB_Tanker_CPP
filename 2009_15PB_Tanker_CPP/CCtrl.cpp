@@ -71,6 +71,14 @@ int CCtrl::Go(int index)
 			PV->PrintMap(cT[i], true);
 		}
 		//子弹流程
+		auto begin = _bullets.begin();
+		while (begin != _bullets.end())
+		{
+			if ((*begin).TryMove(false)) {
+				
+			}
+			++begin;
+		}
 		for (byte i = 2; i < this->_tanks; i++) {
 			if (!cT[i].IsAlive()) continue;
 			tmap.TANKER = i + 1;
@@ -86,18 +94,19 @@ int CCtrl::Go(int index)
 
 		switch (key) {
 		case 'W':case 'A':case 'S':case 'D':	//方向键移动坦克1
+			tmap.TANKER = 0;					//标识地图为坦克NULL
+			PM->SetMap(cT[0].GetOldXY(), tmap, true);
 			if (cT[0].TryMove(key) == true) {	//成功移动
-				tmap.TANKER = 0;				//标识地图为坦克NULL
-				PM->SetMap(cT[0].GetOldXY(), tmap, true);
 				PV->PrintMap(cT[0], true);		//清除旧的坦克
 				cT[0].Move();					//赋值新的坐标
 				tmap.TANKER = 1;				//标识地图为玩家1
 				PM->SetMap(cT[0].GetOldXY(), tmap, true);
 				PV->PrintMap(cT[0]);			//打印新的坦克
+			} else {
+				tmap.TANKER = 1;				//标识地图为坦克1
+				PM->SetMap(cT[0].GetOldXY(), tmap, true);
 			} break;
-		case 'F':
-			this->AddBullet(cT[0]);
-			break;
+		case 'F': this->AddBullet(0x01); break;
 		case 'I':case 'J':case 'K':case 'L':	//方向键移动坦克2
 			break;
 		case KEY_ESC: bGame = 0x00; break;
@@ -109,8 +118,15 @@ int CCtrl::Go(int index)
 	return 0;
 }
 
-bool CCtrl::AddBullet(CTanker& cT)
+bool CCtrl::AddBullet(byte tid)
 {
+	CTanker& tank = this->cT[tid-1];
+	CBullet att;
+	if(att.Init(tank.GetOldXY(),
+		tank.GetDir(false),tank.GetTid())){
+		PV->PrintPoint(att.GetOldXY(), "弹");
+		_bullets.push_back(att);
+	}
 	return true;
 }
 #pragma endregion

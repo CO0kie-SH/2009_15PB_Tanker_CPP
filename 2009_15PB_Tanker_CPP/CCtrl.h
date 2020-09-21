@@ -15,7 +15,7 @@ public:
 	
 	CTanker cT[8];
 private:
-	bool AddBullet(CTanker& cT);
+	bool AddBullet(byte tid);
 
 private:
 	CView*	PV;

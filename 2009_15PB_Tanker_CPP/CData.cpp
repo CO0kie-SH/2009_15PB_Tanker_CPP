@@ -2,7 +2,8 @@
 #include "atlbase.h"
 #include "atlstr.h"
 CHARMAP map[MAP_H][MAP_W];
-void CData::API_OutputDebugPrintf(const char* strOutputString, ...)
+
+void CData::OutputDebugPrintf(const char* strOutputString, ...)
 {
 	char strBuffer[4096] = { 0 };
 	va_list vlArgs;

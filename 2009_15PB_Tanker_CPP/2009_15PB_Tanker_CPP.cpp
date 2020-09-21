@@ -5,20 +5,12 @@
 
 int main()
 {
-    //std::cout << "Hello World!\n";
-
-    char ccc = 0x00;
-    CHARMAP map[2] = { 0 };
-    int i = 0xFA;
-    int nc = sizeof(ccc);
-    int nm = sizeof(map);
-    int ni = sizeof(i);
-    map[1].WALL = 1;
-    //std::cout << (char)map[0].TANKER<<"\n";
-    map[0].TANKER = 15;
-    //std::cout << (char)map[0].TANKER<<"\n";
-    map[0].TANKER++;
-    //std::cout << (char)map[0].TANKER<<"\n";
+    const char* buf = "初始化游戏中...请稍后...";
+    std::cout << buf << endl;
+    CCtrl ct({ 120,36 });
+    if (ct.InitCMD()) {
+        std::cout << "初始化成功。\n";
+    }
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

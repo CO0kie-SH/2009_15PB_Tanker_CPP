@@ -1,12 +1,19 @@
 #pragma once
 
-#include "CTanker.h"
+#include "CView.h"
+#include "CMap.h"
+
 class CCtrl
 {
 public:
-	CCtrl();
+	CCtrl(COORD xy);
 	~CCtrl();
 
-private:
+	bool InitCMD();
 
+	CTanker cT[3];
+private:
+	CView* PV;
+	CMap* PM;
+	COORD _maxXY;
 };

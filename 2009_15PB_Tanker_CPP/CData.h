@@ -1,23 +1,39 @@
 #pragma once
+#include <ctime>
 #include <Windows.h>
-
 class CData
 {
 public:
 	void OutputDebugPrintf(const char* strOutputString, ...);
 	CData();
 	~CData();
-	
+	void RandDir(byte& dir) {
+		int i = GetRand();
+		switch (i % 25) {
+		case 1:dir = 'W'; break;
+		case 2:dir = 'A'; break;
+		case 3:dir = 'S'; break;
+		case 4:dir = 'D'; break;
+		default:break; }
+	};
+	int GetRand(int min = 0, int max = RAND_MAX) {
+		return min + rand() % max;
+	};
+	byte GetKey();
 private:
 
 };
 
 #pragma region 注册宏定义
+//判断指定的按键是否按下
+#define KEY_DOWN(vk_code) ((GetAsyncKeyState(vk_code)&0x8000)?1:0)
+//判断指定的按键是否弹起
+#define KEY_UP(vk_code) ((GetAsyncKeyState(vk_code)&0x8000)?1:0)
 
 //定义地图长宽
 #define MAP_W 30
 #define MAP_H 27
-#define TANKER_MAX 8
+#define TANKER_MAX 7
 
 //定义热键
 #define KEY_ESC 27
@@ -75,8 +91,6 @@ const char PlayerInfo[][15] = {
 	{"得  分  %d\t%d"}
 };
 #pragma endregion
-
-
 #pragma region 定义结构体
 //定义地图
 typedef struct _CHARMAP {
@@ -90,15 +104,13 @@ typedef struct _CHARMAP {
 
 //定义游戏世界参数
 #define 游戏 0x00
-typedef struct _GAMEINFO {
-	byte menu = 0x01;
-	byte levels = 0x00;
-	time_t now;								//声明time_t类型变量
-	ULONGLONG start;
+typedef struct _GAMEINFO {	//全局游戏信息
+	byte menu = 0x01;		//记录菜单信息
+	byte levels = 0x00;		//记录关卡
+	time_t now;				//声明time_t类型变量
+	ULONGLONG start;		//记录游戏开始时间
 }GAMEINFO, * PGAMEINFO;
 #pragma endregion
-
-
 #pragma region 全局变量
 extern CHARMAP map[MAP_H][MAP_W];			//全局地图
 extern HANDLE gOUTPUT;						//窗口输出句柄

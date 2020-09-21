@@ -7,7 +7,7 @@ CMap::CMap()
 CMap::~CMap()
 {
 }
-//CHARMAP map[MAP_H][MAP_W];			//È«¾ÖµØÍ¼
+
 bool CMap::SetMap(int index)
 {
 	short x = 3, y = 5, y2 = 5, x2;
@@ -64,4 +64,19 @@ bool CMap::SetMap(int index)
 
 	}
 	return true;
+}
+
+bool CMap::SetMap(COORD xy, CHARMAP stmap, bool isTank)
+{
+	short i, j;
+	if (isTank) {
+		for (i = -1; i < 2; i++)
+		{
+			for (j = -1; j < 2; j++)
+			{
+				map[xy.Y + j][xy.X + i].TANKER = stmap.TANKER;
+			}
+		}
+	}
+	return false;
 }

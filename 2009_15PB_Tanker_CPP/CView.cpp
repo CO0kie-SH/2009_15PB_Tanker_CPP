@@ -26,15 +26,15 @@ bool CView::InitWindow(COORD& xy, bool isCursor)
 	return (bool)SetConsoleTitleA(INFOMenu[0]);
 }
 
-void CView::PrintPoint(COORD xy, const char* text, WORD color, bool setMap)
+void CView::PrintPoint(COORD xy, const char* text, WORD color)
 {
-	if (color != 0x00)
-		SetConsoleTextAttribute(gOUTPUT, color);
-	xy.X = xy.X * 2 + 2; xy.Y++;
+	if (color != 0x00)							//如果传入颜色
+		SetConsoleTextAttribute(gOUTPUT, color);//则改变画刷
+	xy.X = xy.X * 2 + 2; xy.Y++;				//转换窗口坐标
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), xy);
-	cout << text << flush;
+	cout << text << flush;						//输出文字
 	if (color != 0x00)
-		SetConsoleTextAttribute(gOUTPUT, 0x0F);
+		SetConsoleTextAttribute(gOUTPUT, 0x0F);	//还原画刷
 }
 
 void CView::PrintMap()
@@ -79,13 +79,19 @@ void CView::PrintMap(CHARMAP tmap)
 	SetConsoleTextAttribute(gOUTPUT, 0x0F);
 }
 
-void CView::PrintMap(CTanker& that)
+void CView::PrintMap(CTanker& that, bool clean)
 {
-	SHORT i;
+	if (!that.IsAlive()) return;
+	SHORT i, dir = that.GetDir(), j;
 	for (i = 0; i < 3; i++)
 	{
 		this->PrintPoint({ that._oxy.X - 1,that._oxy.Y + i - 1 },
-			szTankSharp[that._team - 'A'][that.GetDir()][i],
-			that._color, true);
+			clean ? "      " : szTankSharp[that._team - 'A'][dir][i],
+			that._color);
 	}
+	for (j = -1; j < 2; j++)		//草坪始终画草
+		for (i = -1; i < 2; i++)	//循环坦克身体
+			if (map[that._oxy.Y + j][that._oxy.X + i].Grass == true)
+				this->PrintPoint(	//如果是草坪，则画草
+					{ that._oxy.X + i,that._oxy.Y + j }, "草", 0x0A);
 }

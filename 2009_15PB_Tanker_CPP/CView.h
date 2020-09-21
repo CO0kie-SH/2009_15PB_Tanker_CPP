@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CTanker.h"
+#include "CBullet.h"
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -13,11 +14,10 @@ public:
 	~CView();
 
 	bool InitWindow(COORD& xy, bool isCursor);
-	void PrintPoint(COORD xy, const char* text,
-		WORD color = 0x00, bool setMap = true);
+	void PrintPoint(COORD xy, const char* text, WORD color = 0x00);
 	void PrintMap();
 	void PrintMap(CHARMAP tmap);
-	void PrintMap(CTanker& that);
+	void PrintMap(CTanker& that, bool clean = false);
 private:
 
 };

@@ -1,5 +1,6 @@
 #pragma once
-
+#include <list>
+using std::list;
 #include "CView.h"
 #include "CMap.h"
 
@@ -14,8 +15,12 @@ public:
 	
 	CTanker cT[8];
 private:
+	bool AddBullet(CTanker& cT);
+
+private:
 	CView*	PV;
 	CMap*	PM;
 	COORD	_maxXY;
 	byte	_tanks = 0x04;
+	list<CBullet> _bullets;
 };

@@ -8,9 +8,7 @@ bool CBullet::Init(COORD xy, byte dir, byte tid)
     this->_dir = dir;
     this->TryMove(true);
     this->Move();
-    this->TryMove(true);
-    this->Move();
-    return CheckBullet();
+    return true;
 }
 
 bool CBullet::TryMove(bool isRet)
@@ -28,12 +26,19 @@ bool CBullet::TryMove(bool isRet)
 
 bool CBullet::CheckBullet()
 {
-    if (this->_oxy.X == MAP_W) {
+    if (this->_nxy.X == MAP_W ||
+        this->_nxy.Y == MAP_H) {
+        this->_blood = 0;
+        return false;
+    }else if (this->_nxy.X == -1
+        || this->_nxy.Y == -1) {
         this->_blood = 0;
         return false;
     }
-    CHARMAP tmap = map[_oxy.Y][_oxy.X];
-    if (tmap.Wall == true)
+    CHARMAP tmap = map[_nxy.Y][_nxy.X];
+    if (tmap.Wall == true) {
+        this->_blood = 0;
         return false;
+    }
     return true;
 }

@@ -5,6 +5,9 @@ class CBullet :
 {
 public:
     bool Init(COORD xy, byte dir, byte tid);
-    bool TryMove(bool isRet);
+    bool TryMove(bool isRet = false);
     bool CheckBullet();
+    void SetBlood(int blood) {
+        this->_blood = blood;
+    };
 };

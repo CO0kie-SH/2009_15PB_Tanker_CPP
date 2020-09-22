@@ -51,9 +51,8 @@ bool CTanker::CheckMap()
 	return true;
 }
 
-bool CTanker::Move()
+COORD CTanker::Move()
 {
-	this->_oxy.X = this->_nxy.X;
-	this->_oxy.Y = this->_nxy.Y;
-	return true;
+	this->_oxy = { _nxy.X,_nxy.Y };
+	return this->_oxy;
 }

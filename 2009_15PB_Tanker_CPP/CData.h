@@ -44,10 +44,22 @@ private:
 //定义方向
 #define de向上 'W'
 #define de向左 'A'
+//定义坦克属性
+#define deCol敌方速度型 0x03
+#define deCol敌方超重型 0x05
 #pragma endregion
 #pragma region 字符串索引
-const char MAPEnum[][5] = { "　","■","土","草","河" };
-const WORD MColor[5] = { 0x0F ,0x0F ,0x06,0x0A,0x01 };
+#define	deStr河流 "≈"
+#define	deCol河流 0x0B
+#define	deStr草坪 "※"
+#define	deCol草坪 0x0A
+#define	deStr子弹 "●"
+#define	deStr土墙 "◇"
+#define	deStr空地 "　"
+const char MAPEnum[][5] = {
+	deStr空地,"■",deStr土墙,deStr草坪,deStr河流 };
+const WORD MColor[5] = {
+	0x0F ,0x0F ,0x06,deCol草坪,deCol河流 };
 #define	demap河流 0x04
 #define	demap草坪 0x03
 #define	demap土墙 0x02
@@ -107,13 +119,13 @@ typedef struct _CHARMAP {
 typedef struct _GAMEINFO {	//全局游戏信息
 	byte menu = 0x01;		//记录菜单信息
 	byte levels = 0x00;		//记录关卡
-	time_t now;				//声明time_t类型变量
-	ULONGLONG start;		//记录游戏开始时间
+	time_t now = 0x00;		//声明time_t类型变量
+	ULONGLONG start = 0x00;	//记录游戏开始时间
 }GAMEINFO, * PGAMEINFO;
 #pragma endregion
 #pragma region 全局变量
 extern CHARMAP map[MAP_H][MAP_W];			//全局地图
 extern HANDLE gOUTPUT;						//窗口输出句柄
-extern PGAMEINFO gGINFO;
+extern GAMEINFO gGINFO;
 extern CData gAPI;
 #pragma endregion

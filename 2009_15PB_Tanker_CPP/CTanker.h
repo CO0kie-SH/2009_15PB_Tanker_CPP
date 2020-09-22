@@ -29,7 +29,7 @@ public:
 	byte GetTid() { return _tid; };
 	bool TryMove(byte dir = NULL);
 	bool CheckMap();
-	bool Move();
+	COORD Move();
 	bool IsAlive() { return this->_blood > 0; };
 protected:
 	COORD _oxy = { 0,0 };

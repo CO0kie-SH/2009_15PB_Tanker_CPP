@@ -16,6 +16,9 @@ public:
 	CTanker cT[8];
 private:
 	bool AddBullet(byte tid);
+	bool MoveBullet(CBullet& att, bool clean = false);
+	bool MoveTank();
+	void PrintGInfo();
 
 private:
 	CView*	PV;

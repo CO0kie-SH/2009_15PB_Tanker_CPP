@@ -46,7 +46,7 @@ void CView::PrintMap()
 		cout << sWall;
 	for (y = 0; y < MAP_H; ++y)
 	{
-		printf_s("ºó%2d\n%s", y, sWall);
+		printf_s("%s\n%s", sWall, sWall);
 		for (x = 0; x<MAP_W; ++x)
 		{
 			PrintMap(map[y][x]);
@@ -55,11 +55,12 @@ void CView::PrintMap()
 	cout << sWall << '\n'; x += 2;
 	while (x--)
 		cout << sWall;
-	cout << '\n' << sWall;
-	for (x = 0; x < MAP_W; x++)
-	{
-		printf_s("%2d", x + 1);
-	}
+	cout << endl;
+	//cout << '\n' << sWall;
+	//for (x = 0; x < MAP_W; x++)
+	//{
+	//	printf_s("%2d", x + 1);
+	//}
 }
 
 void CView::PrintMap(CHARMAP tmap)
@@ -83,15 +84,23 @@ void CView::PrintMap(CTanker& that, bool clean)
 {
 	if (!that.IsAlive()) return;
 	SHORT i, dir = that.GetDir(), j;
-	for (i = 0; i < 3; i++)
+	for (i = 0; !clean && i < 3; i++)
 	{
 		this->PrintPoint({ that._oxy.X - 1,that._oxy.Y + i - 1 },
-			clean ? "      " : szTankSharp[that._team - 'A'][dir][i],
+			szTankSharp[that._team - 'A'][dir][i],
 			that._color);
 	}
 	for (j = -1; j < 2; j++)		//²ÝÆºÊ¼ÖÕ»­²Ý
 		for (i = -1; i < 2; i++)	//Ñ­»·Ì¹¿ËÉíÌå
+		{
 			if (map[that._oxy.Y + j][that._oxy.X + i].Grass == true)
 				this->PrintPoint(	//Èç¹ûÊÇ²ÝÆº£¬Ôò»­²Ý
-					{ that._oxy.X + i,that._oxy.Y + j }, "²Ý", 0x0A);
+					{ that._oxy.X + i,that._oxy.Y + j },
+					deStr²ÝÆº, deCol²ÝÆº);
+			else if (clean) {		//·ñÔò»­Ë¢¿Õ°×
+				this->PrintPoint(	//»­¿Õ
+					{ that._oxy.X + i,that._oxy.Y + j },
+					deStr¿ÕµØ);
+			}
+		}
 }

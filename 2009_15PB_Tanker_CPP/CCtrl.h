@@ -18,7 +18,7 @@ private:
 	bool AddBullet(byte tid);
 	bool MoveBullet(CBullet& att, bool clean = false);
 	bool MoveTank();
-	void PrintGInfo();
+	void PrintGInfo(unsigned int& msecond);
 
 private:
 	CView*	PV;

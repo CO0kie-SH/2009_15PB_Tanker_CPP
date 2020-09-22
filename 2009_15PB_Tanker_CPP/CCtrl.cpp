@@ -39,7 +39,8 @@ int CCtrl::Go(int index)
 	byte bGame = 'G', key = 0, i = 0, dir = 0;
 	CHARMAP tmap = { 0 };
 	COORD xy = { 0,0 };
-	if (de单人游戏闯关 == index) {
+	unsigned int msecond = 0;
+	if (de单人游戏闯关 == index) {		//初始化单人游戏
 		PM->SetMap(1);
 		this->_tanks = 4;
 		this->cT[0].Init({ MAP_W / 2, MAP_H - 2 }, 100, 1, 'D', 'A', 0x04);
@@ -49,15 +50,17 @@ int CCtrl::Go(int index)
 		tmap.TANKER = 1;
 		PM->SetMap(cT[tmap.TANKER - 1].GetOldXY(), tmap, true);
 	}
+	gGINFO.start = GetTickCount64();	//存储当前时间
 #pragma endregion
 
 //开始循环游戏
 #pragma region 开始循环游戏
 	PV->PrintMap();
 	PV->PrintMap(cT[0]);
-	do
-	{
-
+	do {
+		msecond = (unsigned int)(
+			GetTickCount64() - gGINFO.start);
+		PrintGInfo(msecond);
 #pragma region AI控制逻辑段
 		tmap.TANKER = 0;
 		for (i = 2; i < this->_tanks; i++) {
@@ -177,8 +180,22 @@ bool CCtrl::MoveTank()
 	return false;
 }
 
-void CCtrl::PrintGInfo()
+void CCtrl::PrintGInfo(unsigned int& msecond)
 {
-
+	//	https://blog.csdn.net/xingcen/article/details/55669054
+	if (++gGINFO.count % 10 < 5) return;
+	else gGINFO.count = 0x00;
+	char tick[MAX_PATH];				//用于存储格式的时间
+	time(&gGINFO.now);					//获取系统日期和时间
+	struct tm t;						//tm结构指针
+	localtime_s(&t, &gGINFO.now);		//获取当地日期和时间
+	COORD xy = { MAP_W + 2,0 };
+	strftime(tick, MAX_PATH, "当前时间：%Y年%m月%d日%H:%M:%S", &t);
+	PV->PrintPoint(xy, tick, 0x0E);
+	xy.Y += 2;
+	unsigned short second = msecond / 1000;
+	sprintf_s(tick, "游戏时间：%02d:%02d:%03d",
+		second / 60, second % 60, msecond % 1000);
+	PV->PrintPoint(xy, tick, 0x0E);
 }
 

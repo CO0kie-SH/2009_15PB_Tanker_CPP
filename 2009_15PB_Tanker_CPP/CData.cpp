@@ -1,9 +1,14 @@
 #include "CData.h"
 #include "atlbase.h"
 #include "atlstr.h"
-CHARMAP map[MAP_H][MAP_W];
+//CHARMAP map[MAP_H][MAP_W];
+//CData gAPI;
+//HANDLE gOUTPUT;
+
+CHARMAP map[MAP_H][MAP_W];			//全局地图
+HANDLE gOUTPUT;						//窗口输出句柄
+GAMEINFO gGINFO;
 CData gAPI;
-HANDLE gOUTPUT;
 
 void CData::OutputDebugPrintf(const char* strOutputString, ...)
 {
@@ -20,6 +25,7 @@ CData::CData()
 {
 	memset(map, 0, MAP_H * MAP_W);
 	srand((unsigned int)time(NULL));
+	gGINFO.menu = 0x01;
 }
 
 CData::~CData()

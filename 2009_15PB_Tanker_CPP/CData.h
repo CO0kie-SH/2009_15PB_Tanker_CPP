@@ -115,17 +115,18 @@ typedef struct _CHARMAP {
 }CHARMAP;
 
 //定义游戏世界参数
-#define 游戏 0x00
-typedef struct _GAMEINFO {	//全局游戏信息
-	byte menu = 0x01;		//记录菜单信息
-	byte levels = 0x00;		//记录关卡
-	time_t now = 0x00;		//声明time_t类型变量
-	ULONGLONG start = 0x00;	//记录游戏开始时间
+typedef struct _GAMEINFO {			//全局游戏信息
+	byte player = 0x01;				//记录菜单信息
+	byte count = 0x08;				//记录菜单信息
+	byte menu = 0x01;				//记录菜单信息
+	byte levels = 0x00;				//记录关卡
+	time_t now = 0x00;				//声明time_t类型变量
+	ULONGLONG start = 0x00;			//记录游戏开始时间
 }GAMEINFO, * PGAMEINFO;
 #pragma endregion
 #pragma region 全局变量
-extern CHARMAP map[MAP_H][MAP_W];			//全局地图
-extern HANDLE gOUTPUT;						//窗口输出句柄
-extern GAMEINFO gGINFO;
-extern CData gAPI;
+extern CHARMAP map[MAP_H][MAP_W];	//全局地图
+extern HANDLE gOUTPUT;				//窗口输出句柄
+extern GAMEINFO gGINFO;				//定义游戏信息
+extern CData gAPI;					//定义全局API
 #pragma endregion

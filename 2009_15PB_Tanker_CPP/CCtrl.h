@@ -18,8 +18,9 @@ private:
 	bool AddBullet(byte tid);
 	bool MoveBullet(CBullet& att, bool clean = false);
 	bool MoveTank();
-	void PrintGInfo(unsigned int& msecond);
-
+	bool CheckTank(COORD& xy, byte tid);
+	void PrintGInfo(unsigned int& msecond, WORD color = 0x0E);
+	bool FindBullet(COORD xy, byte* tid);
 private:
 	CView*	PV;
 	CMap*	PM;

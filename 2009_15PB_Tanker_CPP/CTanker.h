@@ -10,11 +10,15 @@ public:
 	~CTanker();
 
 	void Init(COORD xy, int blood, int tid = 0, byte dir = 'W',
-		byte team = 'A', WORD color = 0x0F) {
+		byte team = 'A', WORD color = 0x0F, int speed = 300,
+		int power = 35) {
 		this->_oxy.X = xy.X; this->_oxy.Y = xy.Y;
 		this->_tid = tid;	 this->_dir = dir;
 		this->_color = color;this->_blood = blood;
+		this->_team = team;
+		this->_speed = speed;this->_power = power;
 	};
+
 	byte GetDir(bool to0123 = true) {
 		if (to0123) {
 			switch (this->_dir) {
@@ -30,7 +34,19 @@ public:
 	bool TryMove(byte dir = NULL);
 	bool CheckMap();
 	COORD Move();
+	void GetInfo(int* infos) {
+		infos[0] = this->_blood;
+		infos[1] = this->_speed;
+		infos[2] = this->_power;
+		infos[3] = this->_kills;
+		infos[4] = this->_kills * 10;
+	};
 	bool IsAlive() { return this->_blood > 0; };
+	int GetPower() { return _power; };
+	int GetBlood() { return _blood; };
+	void SetBlood(int blood) { _blood = blood; };
+	void AddKills() { ++_kills; };
+	byte GetTeam() { return _team; };
 protected:
 	COORD _oxy = { 0,0 };
 	COORD _nxy = { 0,0 };
@@ -40,5 +56,7 @@ protected:
 	WORD _color = 0x0F;
 	int _blood = 0;
 private:
-	//int _id = 0;
+	int _speed = 300;
+	int _power = 35;
+	int _kills = 0;
 };

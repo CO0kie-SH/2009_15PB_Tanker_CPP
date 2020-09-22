@@ -40,6 +40,7 @@ private:
 
 //定义游戏状态
 #define de单人游戏闯关 0x01
+#define de双人游戏闯关 0x02
 
 //定义方向
 #define de向上 'W'
@@ -95,12 +96,19 @@ const char GAMEDesc[][20] = {
 	{"向右\t  D\t  L"},
 	{"开火\t  F\t  ;"}
 };
-const char PlayerInfo[][15] = {
-	{"血量\t  %d\t%d"},
-	{"速度\t  %d\t%d"},
-	{"攻击力  %d\t%d"},
-	{"杀敌数  %d\t%d"},
-	{"得  分  %d\t%d"}
+const char PlayerInfo2[][19] = {
+	{"血量\t  %-5d\t%-5d"},
+	{"速度\t  %-5d\t%-5d"},
+	{"攻击力  %-5d\t%-5d"},
+	{"杀敌数  %-5d\t%-5d"},
+	{"得  分  %-5d\t%-5d"}
+};
+const char PlayerInfo[][13] = {
+	{"血量\t  %-5d"},
+	{"速度\t  %-5d"},
+	{"攻击力  %-5d"},
+	{"杀敌数  %-5d"},
+	{"得  分  %-5d"}
 };
 #pragma endregion
 #pragma region 定义结构体

@@ -83,3 +83,4 @@ bool CMap::SetMap(COORD xy, CHARMAP stmap, bool isTank)
 	}
 	return true;
 }
+

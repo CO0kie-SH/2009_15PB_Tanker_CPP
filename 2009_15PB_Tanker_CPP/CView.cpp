@@ -122,3 +122,47 @@ void CView::PrintMap(byte menuIndex, bool err)
 	this->PrintPoint({ x,y + i }, VIEWINFO[err ? 1 : 0],
 		err ? 0x04 : 0x0F);
 }
+
+bool CView::SaveGame(CTanker* Tanks)
+{
+	FILE* pFile = nullptr;
+	fopen_s(&pFile, ".//Debug//TankData.bin", "wb+");
+	if (pFile == nullptr) return false;;
+	fwrite(Tanks, sizeof(CTanker), 7, pFile);
+	fclose(pFile);	pFile = nullptr;
+
+	fopen_s(&pFile, ".//Debug//Map.bin", "wb+");
+	if (pFile == nullptr) return false;
+	fwrite(map, MAP_W * MAP_H, 1, pFile);
+	fclose(pFile);	pFile = nullptr;
+
+	fopen_s(&pFile, ".//Debug//GInfo.bin", "wb+");
+	if (pFile == nullptr) return false;
+	fwrite(&gGINFO, sizeof(gGINFO), 1, pFile);
+	fclose(pFile);	pFile = nullptr;
+	return true;
+}
+
+bool CView::ReadGame(CTanker* Tanks)
+{
+	FILE* pFile = nullptr;
+	fopen_s(&pFile, ".//Debug//TankData.bin", "r");
+	if (pFile == nullptr) return false;
+	fread(Tanks, sizeof(CTanker), 7, pFile);
+	fclose(pFile);	pFile = nullptr;
+
+	fopen_s(&pFile, ".//Debug//Map.bin", "r");
+	if (pFile == nullptr) return false;
+	fread(map, MAP_W * MAP_H, 1, pFile);
+	fclose(pFile);	pFile = nullptr;
+
+	for (byte x = 0; x < MAP_W; x++)
+		for (byte y = 0; y < MAP_H; y++)
+			map[y][x].Bullet = false;
+
+	fopen_s(&pFile, ".//Debug//GInfo.bin", "r");
+	if (pFile == nullptr) return false;
+	fread(&gGINFO, sizeof(gGINFO), 1, pFile);
+	fclose(pFile);	pFile = nullptr;
+	return true;
+}

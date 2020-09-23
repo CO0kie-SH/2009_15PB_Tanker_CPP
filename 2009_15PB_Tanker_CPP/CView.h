@@ -19,6 +19,8 @@ public:
 	void PrintMap(CHARMAP tmap);
 	void PrintMap(CTanker& that, bool clean = false);
 	void PrintMap(byte menuIndex, bool err = false);
+	bool SaveGame(CTanker* Tanks);
+	bool ReadGame(CTanker* Tanks);
 private:
 
 };

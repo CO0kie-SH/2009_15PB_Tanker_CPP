@@ -13,7 +13,7 @@ public:
 	bool InitCMD();
 	int Go(int GameMode = 1, int Checkpoint = 1);
 	void GoKey(byte& key, unsigned int msecond);
-	CTanker cT[8];
+	CTanker cT[7];
 private:
 	void SetTank(int TankI);
 	bool AddBullet(byte tid);

@@ -1,6 +1,8 @@
 #pragma once
 #include <ctime>
 #include <Windows.h>
+#pragma comment(lib,"winmm.lib")	//载入音乐链接库
+
 class CData
 {
 public:
@@ -19,6 +21,7 @@ public:
 	int GetRand(int min = 0, int max = RAND_MAX) {
 		return min + rand() % max;
 	};
+public:
 	byte GetKey();
 private:
 
@@ -42,6 +45,7 @@ private:
 #define de单人游戏闯关 0x01
 #define de双人游戏闯关 0x02
 #define de自定义地图 0x03
+#define de存档游戏 0x04
 
 //定义方向
 #define de向上 'W'
@@ -84,6 +88,13 @@ const char INFOMenu[][31] = {
 const char VIEWINFO[][31] = {
 	{"上下左右选择，按空格键选择。"},
 	{"联系作者开通，按空格键选择。"}
+};
+const char cstr暂停[][31] = {
+	{"游戏暂停！！！！！！"},
+	{"按 Y可储存游戏！！！"},
+	{"按 N可继续游戏！！！"},
+	{"　　　　　　　　　　"},
+	{"　　　　　　　　　　"}
 };
 const char szKEYs[][17] = {
 	"按住 W键可画铁墙",

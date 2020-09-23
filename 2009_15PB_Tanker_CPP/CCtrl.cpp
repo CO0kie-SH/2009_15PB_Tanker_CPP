@@ -48,11 +48,10 @@ bool CCtrl::InitCMD()
 					++gGINFO.levels;
 				}
 			else if (4 == menu)
-				PV->PrintMap(menu, true);
+				Go(de存档游戏);
 			else {
 				if (this->DrawMap())
 					Go(de自定义地图);
-				memset(map, 0, MAP_H * MAP_W);
 				PV->PrintMap();
 				gGINFO.menu = 0x00;
 			}
@@ -102,7 +101,7 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 		if (!PM->SetMap(Checkpoint)) return 0;
 		PV->PrintMap();
 		gGINFO.player = 1; this->SetTank(0);
-		this->cT[1].Init({ 1, 1 }, 0, 2, 'D', 'A', 0x09);
+		this->cT[1].Init({ 1, 1 }, 0, 2);
 	}
 	else if (de双人游戏闯关 == GameMode) {	//初始化双人游戏
 		if (!PM->SetMap(Checkpoint)) return 0;
@@ -111,9 +110,22 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 	}
 	else if (de自定义地图 == GameMode) {	//初始化自定义游戏
 		gGINFO.player = 1; this->SetTank(0);
-		this->cT[1].Init({ 1, 1 }, 0, 2, 'D', 'A', 0x09);
+		this->cT[1].Init({ 1, 1 }, 0, 2);
 	}
 	this->SetTank(2); this->SetTank(3);
+	if (de存档游戏 == GameMode) {		//初始化存档
+		this->PV->ReadGame(cT);
+		this->PV->PrintMap();
+		gGINFO.player = cT[1].IsAlive() ? 2 : 1;
+		tmap = { 0 };
+		for (i = 0; i < _tanks; i++)
+		{
+			PM->SetMap(cT[i].GetOldXY(), tmap, true);
+			cT[i].mSecond = 0;
+			this->PV->PrintMap(cT[i]);
+		}
+		Checkpoint = gGINFO.levels;
+	}
 	gGINFO.count = 7;
 #pragma endregion
 
@@ -155,17 +167,27 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 		}
 #pragma endregion
 #pragma region 结尾处判断
-		if (nums > 99) bGame = NULL;
+		if (de存档游戏 != GameMode && nums > 99) bGame = NULL;
 		if (key == 'P') {
 			gGINFO.start = (unsigned int)(
-				GetTickCount64() - gGINFO.start);	//存储游戏用时
+				GetTickCount64() - gGINFO.start);		//存储游戏用时
+			msecond = 0x02; gGINFO.count = 7;			//标识游戏暂停
+			this->PrintGInfo(msecond, deCol土墙);		//打印操作方法
 			while (i = _getch()) {
 				if (i == 'N' || i == 'n') {
 					gGINFO.start = (unsigned int)
 						(GetTickCount64() - gGINFO.start);	//转换时间
 					break;
 				}
+				else if (i == 'Y' || i == 'y') {
+					gGINFO.start = (unsigned int)
+						(GetTickCount64() - gGINFO.start);	//转换时间
+					this->PV->SaveGame(cT);
+					break;
+				}
 			}
+			msecond = 0x03; gGINFO.count = 7;			//标识游戏暂停
+			this->PrintGInfo(msecond);			//打印操作方法
 		}
 		if (bGame) Sleep(78);
 #pragma endregion
@@ -174,10 +196,13 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 	gGINFO.count = 7; PrintGInfo(msecond, 0x0C);
 	PV->PrintPoint({ MAP_W / 2 - 6,MAP_H / 2 },
 		"游戏结束！按Y退出！", 0x0C);
-	if (nums > 99)
+	if (nums > 99 && de存档游戏 != GameMode)
 		printf_s("过关啦！下一关%d", Checkpoint + 1);
-	else if (key != KEY_ESC)
-		printf_s("玩家%d死亡！", i + 1);
+	else if (key != KEY_ESC) {
+		for (i = 0; i < gGINFO.player; i++)
+			if (!cT[i].IsAlive())
+				printf_s("玩家%d死亡！", i + 1);
+	}
 	while (true) {
 		if ((i = _getch()) && KEY_DOWN('Y'))
 			if (i == 'Y' || i == 'y')
@@ -430,6 +455,16 @@ void CCtrl::PrintGInfo(unsigned int& msecond, WORD color)
 		for (i = 0; i < 7; i++, ++xy.Y)		//循环输出操作模式
 			PV->PrintPoint(xy, szKEYs[
 				color == 0xFF ? 5 : i], MColor[i]);
+		return;
+	}
+	else if (0x02 == msecond) {
+		for (i = 0; i < 5; i++, ++xy.Y)		//循环输出操作模式
+			PV->PrintPoint(xy, cstr暂停[i], color);
+		return;
+	}
+	else if (0x03 == msecond) {
+		for (i = 0; i < 6; i++, ++xy.Y)		//循环输出操作模式
+			PV->PrintPoint(xy, cstr暂停[4], color);
 		return;
 	}
 	for (i = 0; i < 5; i++, xy.Y++)			//循环操作提示

@@ -35,6 +35,8 @@ public:
 	bool TryMove(byte dir = NULL);
 	bool CheckMap();
 	COORD Move();
+
+	int GetInfo2() { return this->_kills * 10; };
 	void GetInfo(int* infos) {
 		infos[0] = this->_blood;
 		infos[1] = this->_speed;
@@ -46,10 +48,13 @@ public:
 	int GetPower() { return _power; };
 	int GetBlood() { return _blood; };
 	int GetSpeed() { return _speed; };
-	unsigned int mSecond = 0;
 	void SetBlood(int blood) { _blood = blood; };
 	void AddKills() { ++_kills; };
 	byte GetTeam() { return _team; };
+
+//定义变量
+public:
+	unsigned int mSecond = 0;
 protected:
 	COORD _oxy = { 0,0 };
 	COORD _nxy = { 0,0 };

@@ -59,11 +59,44 @@ bool CMap::SetMap(int index)
 			for (x = 0; x < 3; x++)
 				map[y + y2][x + x2].Earth = true;
 #pragma endregion
+		return true;
 	}
 	else if (index == 2) {		//¹Ø¿¨2
-
+#pragma region ×¢²áÍÁÇ½1		//×¢²áÍÁÇ½1
+		for (x2 = 0, y = 0; y < 3; y++)
+			for (x = 0; x < MAP_W; x++)
+				map[y + y2][x + x2].Earth = true;
+#pragma endregion
+#pragma region ×¢²áÌúÇ½			//×¢²áÌúÇ½
+		y2 += 5; x2 = MAP_W / 3 - 4;
+		for (y = 0; y < 2; y++)
+			for (x = 0; x < 6; x++)
+				map[y + y2][x + x2].Rever = true;
+		for (x2 += 6, y = 0; y < 2; y++)
+			for (x = 0; x < 6; x++)
+				map[y + y2][x + x2].Rever = true;
+		for (x2 += 6, y = 0; y < 2; y++)
+			for (x = 0; x < 6; x++)
+				map[y + y2][x + x2].Rever = true;
+#pragma endregion
+#pragma region ×¢²á²ÝÆº			//×¢²á²ÝÆº
+		y2 += 4; x2 = 0;
+		for (y = 0; y < 3; y++)
+			for (x = 0; x < MAP_W; x++)
+				map[y + y2][x + x2].Grass = true;
+#pragma endregion
+#pragma region ×¢²áÍÁÇ½2		//×¢²áÍÁÇ½2
+		y2 += 5; x2 = 0;
+		for (y = 0; y < 3; y++)
+			for (x = 0; x < MAP_W; x++)
+				map[y + y2][x + x2].Earth = true;
+#pragma endregion
+		return true;
 	}
-	return true;
+	else {
+		gGINFO.levels = 1;
+	}
+	return false;
 }
 
 bool CMap::SetMap(COORD xy, CHARMAP stmap, bool isTank)

@@ -44,7 +44,9 @@ bool CCtrl::InitCMD()
 		case 32: {
 			if (menu == 5) return false;
 			else if (menu >= 1 && menu <= 2)
-				Go(menu, gGINFO.levels);
+				while (Go(menu, gGINFO.levels)) {
+					++gGINFO.levels;
+				}
 			else if (4 == menu)
 				PV->PrintMap(menu, true);
 			else {
@@ -94,29 +96,24 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 {
 	byte bGame = 'G', key = 0, i = 0;
 	COORD xy = { 0,0 }; CHARMAP tmap = { 0 };
-	unsigned int msecond = 0;
+	unsigned int msecond = 0; int nums = 0;
 	this->_tanks = 4;
 	if (de单人游戏闯关 == GameMode) {		//初始化单人游戏
-		PM->SetMap(Checkpoint);
+		if (!PM->SetMap(Checkpoint)) return 0;
 		PV->PrintMap();
-		gGINFO.player = 1;
-		this->SetTank(0);
+		gGINFO.player = 1; this->SetTank(0);
 		this->cT[1].Init({ 1, 1 }, 0, 2, 'D', 'A', 0x09);
 	}
 	else if (de双人游戏闯关 == GameMode) {	//初始化双人游戏
-		PM->SetMap(Checkpoint);
-		PV->PrintMap();
-		gGINFO.player = 2;
-		this->SetTank(0);
-		this->SetTank(1);
+		if (!PM->SetMap(Checkpoint)) return 0;
+		PV->PrintMap(); gGINFO.player = 2;
+		this->SetTank(0); this->SetTank(1);
 	}
 	else if (de自定义地图 == GameMode) {	//初始化自定义游戏
-		gGINFO.player = 1;
-		this->SetTank(0);
+		gGINFO.player = 1; this->SetTank(0);
 		this->cT[1].Init({ 1, 1 }, 0, 2, 'D', 'A', 0x09);
 	}
-	this->SetTank(2);
-	this->SetTank(3);
+	this->SetTank(2); this->SetTank(3);
 	gGINFO.count = 7;
 #pragma endregion
 
@@ -137,38 +134,49 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 			if (MoveBullet(*begin, true)) ++begin;	//移动
 			else begin = _bullets.erase(begin);	//如果失败则删除
 		}
-		MoveTank(msecond);						//调用坦克移动函数
-		begin = _bullets.begin();
+		MoveTank(msecond);						//调用移动坦克函数
+		begin = _bullets.begin();				//循环开始
 		while (begin != _bullets.end()) {
-			if ((*begin).IsAlive()) {
-				++begin;
-			}
-			else {
-				begin = _bullets.erase(begin);
-			}
+			if ((*begin).IsAlive()) ++begin;
+			else begin = _bullets.erase(begin);
 		}
 #pragma endregion
 #pragma region 人工控制逻辑段
 		this->GoKey(key, msecond);
 		if (key == KEY_ESC)	bGame = NULL;
-		for (i = 0; i < gGINFO.player; i++)
+		for (i = 0,nums=0; i < gGINFO.player; i++)
 		{
 			xy = cT[i].GetOldXY();
+			nums += cT[i].GetInfo2();
 			this->CheckTank(xy, i + 1);
 			if (!cT[i].IsAlive()) {
-				bGame = NULL;
-				break;
+				bGame = NULL; break;
 			}
 		}
 #pragma endregion
-		if (bGame)
-			Sleep(78);
+#pragma region 结尾处判断
+		if (nums > 99) bGame = NULL;
+		if (key == 'P') {
+			gGINFO.start = (unsigned int)(
+				GetTickCount64() - gGINFO.start);	//存储游戏用时
+			while (i = _getch()) {
+				if (i == 'N' || i == 'n') {
+					gGINFO.start = (unsigned int)
+						(GetTickCount64() - gGINFO.start);	//转换时间
+					break;
+				}
+			}
+		}
+		if (bGame) Sleep(78);
+#pragma endregion
 	} while (bGame);
-	gGINFO.count = 8;
-	this->PrintGInfo(msecond, 0x0C);
+#pragma region 单局游戏结算
+	gGINFO.count = 7; PrintGInfo(msecond, 0x0C);
 	PV->PrintPoint({ MAP_W / 2 - 6,MAP_H / 2 },
 		"游戏结束！按Y退出！", 0x0C);
-	if (key != KEY_ESC)
+	if (nums > 99)
+		printf_s("过关啦！下一关%d", Checkpoint + 1);
+	else if (key != KEY_ESC)
 		printf_s("玩家%d死亡！", i + 1);
 	while (true) {
 		if ((i = _getch()) && KEY_DOWN('Y'))
@@ -176,10 +184,11 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 				break;
 		Sleep(11);
 	}
-	memset(map, 0, MAP_H * MAP_W);		//单局游戏结束初始化地图
-	PV->PrintMap();
-	gGINFO.menu = 0x00;	//初始化界面
-	this->_bullets.clear();
+	memset(map, 0, MAP_H * MAP_W);			//单局游戏结束初始化地图
+	PV->PrintMap(); gGINFO.menu = 0x00;		//初始化界面
+	this->_bullets.clear();					//清除子弹数组
+	if (nums > 99) return 1;
+#pragma endregion
 	return 0;
 }
 
@@ -429,7 +438,7 @@ void CCtrl::PrintGInfo(unsigned int& msecond, WORD color)
 	cT[0].GetInfo(itmp);					//获取玩家1
 	if (gGINFO.player == 2)					//判断玩家数量
 		cT[1].GetInfo(itmp2);				//获取玩家2信息
-	for (i = 0; i < 5; i++, ++xy.Y) {		//循环打印玩家属性
+	for (i = 0; i < 6; i++, ++xy.Y) {		//循环打印玩家属性
 		if (gGINFO.player == 1)				//判断玩家1或玩家2
 			sprintf_s(tick, PlayerInfo[i], itmp[i]);
 		else

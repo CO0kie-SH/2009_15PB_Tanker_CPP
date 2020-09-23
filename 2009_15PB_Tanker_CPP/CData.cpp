@@ -23,7 +23,7 @@ CData::CData()
 	memset(map, 0, MAP_H * MAP_W);
 	srand((unsigned int)time(NULL));
 	gGINFO.menu = 0x00;
-	gGINFO.levels = 0x01;
+	gGINFO.levels = 0x02;
 }
 
 CData::~CData()
@@ -33,6 +33,8 @@ CData::~CData()
 byte CData::GetKey()
 {
 	if (KEY_DOWN('Y'))return 'Y';
+	else if (KEY_DOWN('P')) return 'P';
+	else if (KEY_DOWN('N')) return 'N';
 	else if (KEY_DOWN('R')) return 'R';
 	else if (KEY_DOWN('G')) return 'G';
 	else if (KEY_DOWN('F')) return 'F';

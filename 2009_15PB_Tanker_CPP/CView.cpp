@@ -41,6 +41,7 @@ void CView::PrintMap()
 {
 	unsigned short x = MAP_W + 1, y = 0;
 	const char* sWall = MAPEnum[demap铁墙];
+	gGINFO.start = GetTickCount64();	//存储当前时间
 	system("cls");
 	while (x--)
 		cout << sWall;
@@ -117,7 +118,7 @@ void CView::PrintMap(byte menuIndex, bool err)
 		this->PrintPoint({ x,y + i }, INFOMenu[i],
 			i == menuIndex ? deCol草坪 : 0x0F);
 	}
-	x -= 4;
+	x -= 4; ++y;
 	this->PrintPoint({ x,y + i }, VIEWINFO[err ? 1 : 0],
 		err ? 0x04 : 0x0F);
 }

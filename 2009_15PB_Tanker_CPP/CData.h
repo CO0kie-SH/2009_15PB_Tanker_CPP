@@ -50,18 +50,22 @@ private:
 #define deCol敌方速度型 0x03
 #define deCol敌方超重型 0x05
 #pragma endregion
+
 #pragma region 字符串索引
+//定义地图属性
 #define	deStr河流 "≈"
 #define	deCol河流 0x0B
 #define	deStr草坪 "※"
 #define	deCol草坪 0x0A
 #define	deStr子弹 "●"
+#define	deStr铁墙 "■"
 #define	deStr土墙 "◇"
+#define	deCol土墙 0x06
 #define	deStr空地 "　"
 const char MAPEnum[][5] = {
 	deStr空地,"■",deStr土墙,deStr草坪,deStr河流 };
-const WORD MColor[5] = {
-	0x0F ,0x0F ,0x06,deCol草坪,deCol河流 };
+const WORD MColor[8] = {
+	0x0F ,0x0F ,deCol土墙,deCol草坪,deCol河流,0x0F,0x06,0x0E };
 #define	demap河流 0x04
 #define	demap草坪 0x03
 #define	demap土墙 0x02
@@ -80,6 +84,16 @@ const char INFOMenu[][31] = {
 const char VIEWINFO[][31] = {
 	{"上下左右选择，按空格键选择。"},
 	{"联系作者开通，按空格键选择。"}
+};
+const char szKEYs[][17] = {
+	"按住 W键可画铁墙",
+	"按住 D键可画空地",
+	"按住 F键可画土墙",
+	"按住 G键可画草坪",
+	"按住 R键可画河流",
+	"　　　　　　　　",
+	"按住 H键返回界面",
+	"按住 J键确认地图"
 };
 const char szTankSharp[2][4][3][7] = {
 	{
@@ -103,19 +117,21 @@ const char GAMEDesc[][20] = {
 	{"向右\t  D\t  L"},
 	{"开火\t  F\t  ;"}
 };
-const char PlayerInfo2[][19] = {
+const char PlayerInfo2[][20] = {
 	{"血量\t  %-5d\t%-5d"},
 	{"速度\t  %-5d\t%-5d"},
 	{"攻击力  %-5d\t%-5d"},
 	{"杀敌数  %-5d\t%-5d"},
-	{"得  分  %-5d\t%-5d"}
+	{"得  分  %-5d\t%-5d"},
+	{"满  分  100时可进阶"}
 };
-const char PlayerInfo[][13] = {
+const char PlayerInfo[][20] = {
 	{"血量\t  %-5d"},
 	{"速度\t  %-5d"},
 	{"攻击力  %-5d"},
 	{"杀敌数  %-5d"},
-	{"得  分  %-5d"}
+	{"得  分  %-5d"},
+	{"满  分  100时可进阶"}
 };
 #pragma endregion
 #pragma region 定义结构体

@@ -7,6 +7,8 @@ int main()
     const char* buf = "初始化游戏中...请稍后...";
     SetConsoleTitleA(buf);
     std::cout << buf << endl;
+
+
     CCtrl GAME({ 120,34 });
-    while (GAME.InitCMD());
+    GAME.InitCMD();
 }

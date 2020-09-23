@@ -2,6 +2,8 @@
 
 bool CBullet::Init(COORD xy, byte dir, byte tid)
 {
+    /*if (map[xy.Y][xy.X].Bullet == true)
+        return false;*/
     this->_blood = 1;
     this->_oxy = { xy.X,xy.Y };
     this->_tid = tid;

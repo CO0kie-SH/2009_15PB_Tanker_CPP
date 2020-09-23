@@ -1,7 +1,6 @@
 #pragma once
 #include <ctime>
 #include <Windows.h>
-#pragma comment(lib,"winmm.lib")	//‘ÿ»Î“Ù¿÷¡¥Ω”ø‚
 
 class CData
 {

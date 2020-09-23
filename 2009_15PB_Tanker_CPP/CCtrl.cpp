@@ -29,6 +29,7 @@ bool CCtrl::InitCMD()
 	if (PV->InitWindow(_maxXY, false) == false)
 		return false;
 	byte menu = 1;
+	PB.PlayMusic();
 	PV->PrintMap(); PV->PrintMap(menu);
 	do
 	{

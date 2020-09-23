@@ -11,16 +11,18 @@ public:
 	~CCtrl();
 
 	bool InitCMD();
-	int Go(int index = 1);
+	int Go(int GameMode = 1, int Checkpoint = 1);
 	
 	CTanker cT[8];
 private:
+	void SetTank(int TankI);
 	bool AddBullet(byte tid);
 	bool MoveBullet(CBullet& att, bool clean = false);
-	bool MoveTank();
+	bool MoveTank(unsigned int& mSecond);
 	bool CheckTank(COORD& xy, byte tid);
 	void PrintGInfo(unsigned int& msecond, WORD color = 0x0E);
 	bool FindBullet(COORD xy, byte* tid);
+	bool DrawMap();
 private:
 	CView*	PV;
 	CMap*	PM;

@@ -104,3 +104,20 @@ void CView::PrintMap(CTanker& that, bool clean)
 			}
 		}
 }
+
+void CView::PrintMap(byte menuIndex, bool err)
+{
+	if (menuIndex == gGINFO.menu && !err)
+		return;
+	else gGINFO.menu = menuIndex;
+	byte x = MAP_W / 2 - 4, y = MAP_H / 2 - 4,
+		i, max = 6;
+	for (i = 1; i < max; i++)
+	{
+		this->PrintPoint({ x,y + i }, INFOMenu[i],
+			i == menuIndex ? deCol²ÝÆº : 0x0F);
+	}
+	x -= 4;
+	this->PrintPoint({ x,y + i }, VIEWINFO[err ? 1 : 0],
+		err ? 0x04 : 0x0F);
+}

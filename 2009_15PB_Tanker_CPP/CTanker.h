@@ -10,13 +10,14 @@ public:
 	~CTanker();
 
 	void Init(COORD xy, int blood, int tid = 0, byte dir = 'W',
-		byte team = 'A', WORD color = 0x0F, int speed = 300,
-		int power = 35) {
+		byte team = 'A', WORD color = 0x0F, int speed = 200,
+		int power = 20) {
 		this->_oxy.X = xy.X; this->_oxy.Y = xy.Y;
 		this->_tid = tid;	 this->_dir = dir;
 		this->_color = color;this->_blood = blood;
 		this->_team = team;
 		this->_speed = speed;this->_power = power;
+		this->mSecond = 0;
 	};
 
 	byte GetDir(bool to0123 = true) {
@@ -44,6 +45,8 @@ public:
 	bool IsAlive() { return this->_blood > 0; };
 	int GetPower() { return _power; };
 	int GetBlood() { return _blood; };
+	int GetSpeed() { return _speed; };
+	unsigned int mSecond = 0;
 	void SetBlood(int blood) { _blood = blood; };
 	void AddKills() { ++_kills; };
 	byte GetTeam() { return _team; };

@@ -14,7 +14,7 @@ public:
 		case 2:dir = 'A'; break;
 		case 3:dir = 'S'; break;
 		case 4:dir = 'D'; break;
-		default:break; }
+		default:dir = NULL; break; }
 	};
 	int GetRand(int min = 0, int max = RAND_MAX) {
 		return min + rand() % max;
@@ -41,6 +41,7 @@ private:
 //定义游戏状态
 #define de单人游戏闯关 0x01
 #define de双人游戏闯关 0x02
+#define de自定义地图 0x03
 
 //定义方向
 #define de向上 'W'
@@ -66,13 +67,19 @@ const WORD MColor[5] = {
 #define	demap土墙 0x02
 #define	demap铁墙 0x01
 #define	demap空地 0x00
+#define	deMenu 0x06
 const char INFOMenu[][31] = {
 	{"欢迎使用CO0Kie丶初代坦克大战。"},
-	{"①单人游戏"},
-	{"②双人游戏"},
-	{"③读取游戏"},
-	{"④编辑地图"},
-	{"⑤ 退 出"}
+	{"①单人闯关游戏"},
+	{"②双人闯关游戏"},
+	{"③自 定 义地图"},
+	{"④载 入 存 档"},
+	{"⑤退 出 游 戏"},
+	{"　　　　　　　　　"}
+};
+const char VIEWINFO[][31] = {
+	{"上下左右选择，按空格键选择。"},
+	{"联系作者开通，按空格键选择。"}
 };
 const char szTankSharp[2][4][3][7] = {
 	{

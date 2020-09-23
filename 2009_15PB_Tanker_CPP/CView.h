@@ -18,6 +18,7 @@ public:
 	void PrintMap();
 	void PrintMap(CHARMAP tmap);
 	void PrintMap(CTanker& that, bool clean = false);
+	void PrintMap(byte menuIndex, bool err = false);
 private:
 
 };

@@ -5,11 +5,8 @@
 int main()
 {
     const char* buf = "初始化游戏中...请稍后...";
+    SetConsoleTitleA(buf);
     std::cout << buf << endl;
     CCtrl GAME({ 120,34 });
-    if (GAME.InitCMD()) {
-        std::cout << "初始化成功。按任意键继续。\n";
-        system("PAUSE");
-        GAME.Go(de单人游戏闯关);
-    }
+    while (GAME.InitCMD());
 }

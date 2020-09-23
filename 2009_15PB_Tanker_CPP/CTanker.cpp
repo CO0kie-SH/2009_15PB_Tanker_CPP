@@ -9,6 +9,12 @@ CTanker::~CTanker()
 
 bool CTanker::TryMove(byte dir)
 {
+	switch (dir) {
+	case 'I':dir = 'W'; break;
+	case 'J':dir = 'A'; break;
+	case 'K':dir = 'S'; break;
+	case 'L':dir = 'D'; break;
+	default:break; }
 	if (dir != NULL && this->_dir != dir) {	//如果方向不同，则修改方向
 		this->_dir = dir; this->_nxy = this->_oxy;
 		return true;
@@ -30,8 +36,7 @@ bool CTanker::CheckMap()
 	if (nxy.X == MAP_W - 1) return false;
 	else if (nxy.X == 0) return false;
 
-	CHARMAP tmap;
-	SHORT i, j;
+	CHARMAP tmap; SHORT i, j;
 	for (i = -1; i < 2; i++)
 	{
 		for (j = -1; j < 2; j++)

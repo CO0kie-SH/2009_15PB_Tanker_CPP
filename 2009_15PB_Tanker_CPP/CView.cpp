@@ -50,11 +50,6 @@ void CView::PrintMap()
 	while (x--)
 		cout << sWall;
 	cout << endl;
-	//cout << '\n' << sWall;
-	//for (x = 0; x < MAP_W; x++)
-	//{
-	//	printf_s("%2d", x + 1);
-	//}
 }
 
 void CView::PrintMap(CHARMAP tmap)
@@ -104,8 +99,8 @@ void CView::PrintMap(byte menuIndex, bool err)
 	if (menuIndex == gGINFO.menu && !err)
 		return;
 	else gGINFO.menu = menuIndex;
-	if (gGINFO.count++ > 7)
-		PB.PlayOp();
+	if (gGINFO.count++ > 7) PB.PlayOp();
+	if (gGINFO.count > 9) gGINFO.count = 0xF7;
 	byte x = MAP_W / 2 - 4, y = MAP_H / 2 - 4,
 		i, max = 6;
 	for (i = 1; i < max; i++)

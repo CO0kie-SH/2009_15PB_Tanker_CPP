@@ -329,7 +329,7 @@ bool CCtrl::MoveBullet(CBullet& att, bool clean)
 			PV->PrintPoint(xy, deStr子弹, deCol河流);
 		else if (tmap.Grass == true) {}			//草坪则不重画
 		else if (tmap.Earth == true) {			//遇到土墙则销毁
-			att.SetBlood(0);					//销毁子弹
+			att.MinBlood();						//销毁子弹
 			tmap = { 0 };
 			PM->SetMap(xy, tmap);				//重置地图
 			PV->PrintPoint(xy, deStr空地);		//画空地
@@ -337,7 +337,7 @@ bool CCtrl::MoveBullet(CBullet& att, bool clean)
 		}
 		else if(tmap.Bullet == true){			//子弹与子弹碰撞
 			FindBullet(xy, nullptr);			//找到子弹点并销毁
-			att.SetBlood(0);					//销毁自身
+			att.MinBlood();						//销毁自身
 			map[xy.Y][xy.X].Bullet = false;		//设置地图
 			PV->PrintPoint(xy, deStr空地);		//画空地
 			return	false;						//函数返回
@@ -435,13 +435,13 @@ bool CCtrl::FindBullet(COORD xy, byte* tid)
 		bxy = (*begin).GetOldXY();				//获取子弹坐标
 		if (xy.X == bxy.X && xy.Y == bxy.Y) {	//判断坐标
 			if (tid == nullptr) {				//从子弹碰撞传入
-				(*begin).SetBlood(0);			//则销毁子弹
+				(*begin).MinBlood();			//则销毁子弹
 				return true;					//返回函数
 			}
 			*tid = (*begin).GetTid();			//设置子弹归属
 			map[xy.Y][xy.X].Bullet = false;		//设置地图为空
 			PV->PrintPoint(xy, deStr空地);		//打印空地
-			(*begin).SetBlood(0);				//清除子弹
+			(*begin).MinBlood();				//清除子弹
 			return true;						//返回函数
 		}
 		++begin;								//循环自增

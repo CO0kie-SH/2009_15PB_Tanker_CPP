@@ -4,7 +4,7 @@
 class CTanker
 {
 friend class CView;
-friend class CMap;
+friend class CAStar;
 public:
 	CTanker();
 	~CTanker();
@@ -19,6 +19,7 @@ public:
 		this->_speed = speed;this->_power = power;
 		this->mSecond = 0;	this->_kills = 0;
 	};
+	
 
 	byte GetDir(bool to0123 = true) {
 		if (to0123) {
@@ -30,11 +31,11 @@ public:
 		}
 		return this->_dir;
 	};
-	COORD GetOldXY() { return _oxy; };
 	byte GetTid() { return _tid; };
 	bool TryMove(byte dir = NULL);
 	bool CheckMap();
 
+	COORD GetOldXY() { return _oxy; };
 	/*ÒÆ¶¯Ì¹¿Ëº¯Êý*/
 	COORD Move();
 

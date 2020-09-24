@@ -3,6 +3,7 @@
 using std::list;
 #include "CView.h"
 #include "CMap.h"
+#include "CAStar.h"
 
 class CCtrl
 {
@@ -59,6 +60,7 @@ private:	//	//	//对内变量
 	CTanker cT[7];	//坦克数组
 	CView*	PV;		//视图函数
 	CMap*	PM;		//地图函数
+	CAStar	PA;		//寻路算法
 	COORD	_maxXY;	//内部窗口大小
 	byte	_tanks = 0x04;	//坦克数量
 	list<CBullet> _bullets;	//子弹数组

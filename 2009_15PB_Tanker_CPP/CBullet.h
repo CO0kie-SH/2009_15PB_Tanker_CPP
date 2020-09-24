@@ -16,4 +16,9 @@ public:
     void SetBlood(int blood) {
         this->_blood = blood;
     };
+
+    /*设置子弹血量，标识是否销毁*/
+    void MinBlood() {
+        --this->_blood;
+    };
 };

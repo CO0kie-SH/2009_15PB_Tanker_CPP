@@ -2,31 +2,41 @@
 #include <algorithm>
 
 
-void CAStar::Go()
+void CAStar::Go(COORD head, COORD end, byte* dir, bool print)
 {
+	_hxy = head; _exy = end; char buf[255];
 	memcpy_s(tmap, MAP_LEN, map, MAP_LEN);
 	_open.push_back({ _hxy.X,_hxy.Y });
-	//Print(_exy, "尾");
+	if (print) Print(_exy, "尾");
 	if (FindOpen() && GetPath()) {
-		//找到路径
-		_find = (*(_path.end() - 1)).XY;
-		//Print(_find, "下", 0x0A);
+		_find = (*(_path.end() - 1)).XY;		//找到路径
+		for (int i = _path.size() - 1, j = 0; print && i; --i) {
+			sprintf_s(buf, "%2d", ++j);
+			Print(_path[i].XY, buf);
+		}
+		if (_find.X + 1 == head.X) *dir = 'A';
+		else if (_find.X - 1 == head.X) *dir = 'D';
+		else if (_find.Y - 1 == head.Y) *dir = 'S';
+		else if (_find.Y + 1 == head.Y) *dir = 'W';
+		if (print) {
+			sprintf_s(buf, "%c%c", (int)*dir, (int)*dir);
+			Print(_find, buf, 0x0A);
+		}
 	}
-	_open.clear(); _close.clear();
+	_open.clear(); _close.clear(); _path.clear();
 }
 
 bool CAStar::FindOpen()
 {
-	COORDEX OldPos;
-	COORDEX newPos;
-	vector<COORD> points;
-	char buff[250];
-	while (!_open.empty())
-	{
+	COORDEX OldPos;				//定义变量
+	COORDEX newPos;				//定义变量
+	vector<COORD> points;		//定义变量
+	//char buff[250];			//定义变量
+	while (!_open.empty()) {	//循环待表
 		auto min = min_element(_open.rbegin(), _open.rend(), compare);
-		sprintf_s(buff, "%2d", (*min).g_value);
-		Print((*min).XY, buff);
-		Sleep(5);
+		//sprintf_s(buff, "%2d", (*min).g_value);
+		//Print((*min).XY, buff);
+		//Sleep(5);
 		OldPos = (*min);					//获取点
 		this->tmap[OldPos.XY.Y][OldPos.XY.X].Wall = true;
 		_close.push_back(OldPos);			//加入已找的表
@@ -43,14 +53,14 @@ bool CAStar::FindOpen()
 				_close.push_back(newPos);	//加入已表
 				return true;				//跳出循环
 			}
-			Print(point, "待");
-			_open.push_back(newPos);
+			//Print(point, "待");
+			_open.push_back(newPos);		//加入待表
 		}
 	}
 	return false;
 }
 
-bool CAStar::KuoSan(COORD oXY, vector<COORD>& points)
+bool CAStar::KuoSan(COORD& oXY, vector<COORD>& points)
 {
 	COORD offset[4] = { {-1, 0}, {1, 0}, {0,-1}, {0, 1} };
 	COORD addPos;
@@ -90,7 +100,7 @@ bool CAStar::GetPath()
 	{
 		if (_close[i] == _hxy) break;
 		if (_close[i] == _find) {
-			Print(_find, "路");
+			//Print(_find, "路");
 			_path.push_back(_close[i]);
 			_find = _close[i].oXY;
 		}

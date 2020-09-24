@@ -3,6 +3,7 @@
 
 
 #pragma region 初始化游戏环境
+/*构造函数*/
 CCtrl::CCtrl(COORD xy)
 	:_maxXY(xy)
 {
@@ -16,6 +17,7 @@ CCtrl::CCtrl(COORD xy)
 	gAPI.OutputDebugPrintf("初始化。");
 }
 
+/*析构函数*/
 CCtrl::~CCtrl()
 {
 	delete PV;				//释放视图类&地图类
@@ -60,11 +62,11 @@ bool CCtrl::InitCMD()
 				gGINFO.menu = 0x00;
 			}
 			break; }
-		case 'R': case 'r':
-			memset(map, 0, MAP_H * MAP_W);
-			PV->PrintMap();
-			PA->Go();
-			break;
+		//case 'R': case 'r':
+		//	memset(map, 0, MAP_H * MAP_W);
+		//	PV->PrintMap();
+		//	PA->Go();
+		//	break;
 		default: break;
 		}
 	} while (true);
@@ -184,7 +186,7 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 		}
 #pragma endregion
 #pragma region 结尾处判断
-		if (de存档游戏 != GameMode && nums > 99) bGame = NULL;
+		if (de存档游戏 > GameMode && nums > 99) bGame = NULL;
 		if (key == 'P') {
 			gGINFO.start = (unsigned int)(
 				GetTickCount64() - gGINFO.start);		//存储游戏用时
@@ -305,6 +307,7 @@ bool CCtrl::AddBullet(byte tid)
 	if(att.Init(xy, tank.GetDir(false),tank.GetTid())){
 		if (MoveBullet(att)) {				//初始化子弹后，尝试移动
 			if (tid <= 2) PV->PB.PlayOp();	//增加子弹音效
+			if (isASTR) att.SetBlood(INTPTR_MAX);//设置跟踪弹
 			_bullets.push_back(att);		//如果成功，则加入变量
 			return true;					//函数返回
 		}
@@ -326,6 +329,11 @@ bool CCtrl::MoveBullet(CBullet& att, bool clean)
 		else if (tmap.Grass == true)			//还原绿色草坪
 			PV->PrintPoint(xy, deStr草坪, deCol草坪);
 		else PV->PrintPoint(xy, deStr空地);		//还原空地
+	}
+	byte dir = NULL;
+	if (att.GetBlood() > 99) {
+		PA->Go(xy, cT[2].GetOldXY(), &dir);
+		if (dir) att.SetDir(dir);
 	}
 	if (att.TryMove()) {						//试图移动子弹
 		xy = att.Move();						//如果成功，则移动
@@ -446,7 +454,7 @@ bool CCtrl::FindBullet(COORD xy, byte* tid)
 			*tid = (*begin).GetTid();			//设置子弹归属
 			map[xy.Y][xy.X].Bullet = false;		//设置地图为空
 			PV->PrintPoint(xy, deStr空地);		//打印空地
-			(*begin).MinBlood();				//清除子弹
+			(*begin).SetBlood(0);				//清除子弹
 			return true;						//返回函数
 		}
 		++begin;								//循环自增
@@ -456,7 +464,7 @@ bool CCtrl::FindBullet(COORD xy, byte* tid)
 
 #pragma endregion
 
-//地图、视图功能区
+//地图、视图功能区	用于调用Map、View类进行处理
 #pragma region 地图视图功能区
 
 /*	游戏信息打印函数

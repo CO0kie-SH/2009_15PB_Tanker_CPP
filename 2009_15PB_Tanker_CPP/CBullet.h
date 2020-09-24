@@ -17,6 +17,15 @@ public:
         this->_blood = blood;
     };
 
+    /*设置子弹方向*/
+    void SetDir(byte Dir) {
+        switch (Dir) {
+        case 'W': case 'A': case 'S': case 'D':  
+            this->_dir = Dir; break;
+        default: break;
+        }
+    };
+
     /*设置子弹血量，标识是否销毁*/
     void MinBlood() {
         --this->_blood;

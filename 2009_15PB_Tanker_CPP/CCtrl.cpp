@@ -1,14 +1,14 @@
 #include "CCtrl.h"
 #include <conio.h>
 
-//HANDLE gOUTPUT;
 
 #pragma region 初始化游戏环境
 CCtrl::CCtrl(COORD xy)
 	:_maxXY(xy)
 {
 	PV = new CView(); PM = new CMap();
-	if (!PV || !PM) {
+	PA = new CAStar();
+	if (!PV || !PM || !PA) {
 		printf_s("初始化视图错误。\n");
 		exit(1);
 	}
@@ -60,6 +60,11 @@ bool CCtrl::InitCMD()
 				gGINFO.menu = 0x00;
 			}
 			break; }
+		case 'R': case 'r':
+			memset(map, 0, MAP_H * MAP_W);
+			PV->PrintMap();
+			PA->Go();
+			break;
 		default: break;
 		}
 	} while (true);

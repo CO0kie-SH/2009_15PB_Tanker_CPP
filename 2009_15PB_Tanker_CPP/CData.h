@@ -42,6 +42,8 @@ private:
 //定义地图长宽
 #define MAP_W 30
 #define MAP_H 27
+#define MAP_LEN (MAP_W * MAP_H)
+
 #define TANKER_MAX 7
 
 //定义热键
@@ -60,6 +62,13 @@ private:
 //定义坦克属性
 #define deCol敌方速度型 0x03
 #define deCol敌方超重型 0x05
+// 通用前景色
+#define COLOR_NO			0x0000
+#define COLOR_H_GREEN		0x0008 | 0x0002
+#define COLOR_H_BLUE		0x0008 | 0x0001
+#define COLOR_H_YELLOW		0x0008 | 0x0004 | 0x0002
+#define COLOR_WHITE			0x0004 | 0x0002 |0x0001
+#define COLOR_H_WHITE		0x0008 | 0x0004 | 0x0002 |0x0001
 #pragma endregion
 
 #pragma region 字符串索引

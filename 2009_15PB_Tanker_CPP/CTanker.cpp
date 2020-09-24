@@ -56,6 +56,7 @@ bool CTanker::CheckMap()
 	return true;
 }
 
+/*ÒÆ¶¯Ì¹¿Ëº¯Êý*/
 COORD CTanker::Move()
 {
 	this->_oxy = { _nxy.X,_nxy.Y };

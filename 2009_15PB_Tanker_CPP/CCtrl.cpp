@@ -23,6 +23,7 @@ CCtrl::~CCtrl()
 	//CloseHandle(gOUTPUT);	//释放输出句柄
 }
 
+/*初始化窗口*/
 bool CCtrl::InitCMD()
 {
 	//初始化窗口光标、大小
@@ -66,9 +67,14 @@ bool CCtrl::InitCMD()
 }
 #pragma endregion
 
+//游戏循环功能区
+#pragma region 游戏循环功能区
+
 //游戏开始
 #pragma region 初始化游戏世界
-//用于重置坦克
+
+/*	初始化坦克函数
+	用于初始化坦克	*/
 void CCtrl::SetTank(int TankI)
 {
 	CHARMAP tmap = { 0 };
@@ -94,8 +100,10 @@ void CCtrl::SetTank(int TankI)
 	}
 }
 
+/*开始游戏函数*/
 int CCtrl::Go(int GameMode, int Checkpoint)
 {
+#pragma region 初始化函数变量
 	byte bGame = 'G', key = 0, i = 0;
 	COORD xy = { 0,0 }; CHARMAP tmap = { 0 };
 	unsigned int msecond = 0; int nums = 0;
@@ -129,7 +137,8 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 		}
 		Checkpoint = gGINFO.levels;
 	}
-	gGINFO.count = 7;
+#pragma endregion
+	gGINFO.count = de打印游戏信息;
 #pragma endregion
 
 //开始循环游戏
@@ -199,7 +208,7 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 	gGINFO.count = 0x07; PrintGInfo(msecond, 0x0C);		//标识游戏信息
 	PV->PrintPoint({ MAP_W / 2 - 6,MAP_H / 2 },			//打印游戏结束
 		"游戏结束！按Y退出！", 0x0C);					//打印游戏结束
-	if (nums > 99 && de存档游戏 != GameMode)			//判断是否过关
+	if (nums > 99 && de自定义地图 > GameMode)			//判断是否过关
 		printf_s("过关啦！下一关%d", Checkpoint + 1);	//输出过关信息
 	else if (key != KEY_ESC) {							//如果玩家死亡
 		for (i = 0; i < gGINFO.player; i++)				//那么循环输出
@@ -272,6 +281,7 @@ void CCtrl::GoKey(byte& key, unsigned int msecond)
 
 #pragma endregion
 
+#pragma endregion
 
 //坦克、子弹功能区
 #pragma region 坦克子弹功能区

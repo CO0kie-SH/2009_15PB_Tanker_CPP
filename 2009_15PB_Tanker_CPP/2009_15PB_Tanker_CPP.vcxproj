@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2009_15PB_Tanker_CPP.cpp" />
+    <ClCompile Include="CAStar.cpp" />
     <ClCompile Include="CBgm.cpp" />
     <ClCompile Include="CBullet.cpp" />
     <ClCompile Include="CCtrl.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="CView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CAStar.h" />
     <ClInclude Include="CBgm.h" />
     <ClInclude Include="CBullet.h" />
     <ClInclude Include="CCtrl.h" />

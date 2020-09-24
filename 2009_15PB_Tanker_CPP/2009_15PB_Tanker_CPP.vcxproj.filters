@@ -39,6 +39,9 @@
     <ClCompile Include="CBullet.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CAStar.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCtrl.h">
@@ -60,6 +63,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CBullet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CAStar.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

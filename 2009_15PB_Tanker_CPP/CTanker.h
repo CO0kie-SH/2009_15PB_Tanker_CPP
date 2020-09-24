@@ -34,6 +34,8 @@ public:
 	byte GetTid() { return _tid; };
 	bool TryMove(byte dir = NULL);
 	bool CheckMap();
+
+	/*移动坦克函数*/
 	COORD Move();
 
 	int GetInfo2() { return this->_kills * 10; };
@@ -52,10 +54,11 @@ public:
 	void AddKills() { ++_kills; };
 	byte GetTeam() { return _team; };
 
-//定义变量
-public:
-	unsigned int mSecond = 0;
-protected:
+
+public:		//	//	//对外变量
+	unsigned int mSecond = 0;	//定义毫秒数
+
+protected:	//	//	//保护变量
 	COORD _oxy = { 0,0 };
 	COORD _nxy = { 0,0 };
 	byte _tid = 0;
@@ -63,7 +66,8 @@ protected:
 	byte _team = 'A';
 	WORD _color = 0x0F;
 	int _blood = 0;
-private:
+
+private:	//	//	//对内变量
 	int _speed = 300;
 	int _power = 35;
 	int _kills = 0;

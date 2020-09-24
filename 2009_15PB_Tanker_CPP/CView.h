@@ -10,8 +10,6 @@ using std::flush;
 class CView
 {
 public:
-	CView();
-	~CView();
 	CBgm	PB;
 
 	bool InitWindow(COORD& xy, bool isCursor);

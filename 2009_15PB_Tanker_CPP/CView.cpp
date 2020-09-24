@@ -1,12 +1,5 @@
 #include "CView.h"
 
-CView::CView()
-{
-}
-
-CView::~CView()
-{
-}
 
 bool CView::InitWindow(COORD& xy, bool isCursor)
 {

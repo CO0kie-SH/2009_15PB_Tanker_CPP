@@ -1,13 +1,6 @@
 #include "CMap.h"
 
-CMap::CMap()
-{
-}
-
-CMap::~CMap()
-{
-}
-
+/*按菜单初始化地图*/
 bool CMap::SetMap(int index)
 {
 	short x = 3, y = 5, y2 = 5, x2;
@@ -99,6 +92,7 @@ bool CMap::SetMap(int index)
 	return false;
 }
 
+/*按坐标信息改变地图*/
 bool CMap::SetMap(COORD xy, CHARMAP stmap, bool isTank)
 {
 	short i, j;

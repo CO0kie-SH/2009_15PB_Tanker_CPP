@@ -7,6 +7,8 @@ HANDLE gOUTPUT;				//窗口输出句柄
 GAMEINFO gGINFO;			//定义游戏信息
 CData gAPI;					//定义全局API
 
+/*	API函数
+	用于向VS输出变量信息	*/
 void CData::OutputDebugPrintf(const char* strOutputString, ...)
 {
 	char strBuffer[4096] = { 0 };

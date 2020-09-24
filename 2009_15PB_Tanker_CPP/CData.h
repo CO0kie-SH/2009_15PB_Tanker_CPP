@@ -5,9 +5,14 @@
 class CData
 {
 public:
+	/*API函数
+	用于向VS输出变量信息	*/
 	void OutputDebugPrintf(const char* strOutputString, ...);
-	CData();
-	~CData();
+
+	CData();	//构造函数
+	~CData();	//析构函数
+
+	/*随机方向函数，用于概率随机方向*/
 	void RandDir(byte& dir) {
 		int i = GetRand();
 		switch (i % 25) {
@@ -17,6 +22,8 @@ public:
 		case 4:dir = 'D'; break;
 		default:dir = NULL; break; }
 	};
+
+	/*随机数函数，用于取随机数*/
 	int GetRand(int min = 0, int max = RAND_MAX) {
 		return min + rand() % max;
 	};
@@ -45,6 +52,7 @@ private:
 #define de双人游戏闯关 0x02
 #define de自定义地图 0x03
 #define de存档游戏 0x04
+#define de打印游戏信息 0x07
 
 //定义方向
 #define de向上 'W'

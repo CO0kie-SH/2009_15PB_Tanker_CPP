@@ -1,5 +1,6 @@
 #include "CBullet.h"
 
+/*初始化子弹*/
 bool CBullet::Init(COORD xy, byte dir, byte tid)
 {
     this->_blood = 1;
@@ -11,6 +12,7 @@ bool CBullet::Init(COORD xy, byte dir, byte tid)
     return true;
 }
 
+/*试图移动子弹*/
 bool CBullet::TryMove(bool isRet)
 {
     this->_nxy = { this->_oxy.X,this->_oxy.Y };
@@ -24,6 +26,7 @@ bool CBullet::TryMove(bool isRet)
     return CheckBullet();
 }
 
+/*检查子弹*/
 bool CBullet::CheckBullet()
 {
     if (this->_nxy.X == MAP_W ||

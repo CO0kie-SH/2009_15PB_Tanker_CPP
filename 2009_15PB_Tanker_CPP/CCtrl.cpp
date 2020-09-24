@@ -152,8 +152,8 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 #pragma region 开始循环游戏
 	do {
 		msecond = (unsigned int)(
-			GetTickCount64() - gGINFO.start);
-		PrintGInfo(msecond);
+			GetTickCount64() - gGINFO.start);	//设置毫秒数
+		PrintGInfo(msecond);					//打印游戏信息
 #pragma region AI控制逻辑段
 		tmap.TANKER = 0;						//设置地图坦克false
 		for (i = 2; i < this->_tanks; i++) {	//循环清零
@@ -167,26 +167,27 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 		}
 		MoveTank(msecond);						//调用移动坦克函数
 		begin = _bullets.begin();				//循环开始
-		while (begin != _bullets.end()) {
-			if ((*begin).IsAlive()) ++begin;
-			else begin = _bullets.erase(begin);
+		while (begin != _bullets.end()) {		//循环子弹
+			if ((*begin).IsAlive()) ++begin;	//如果死亡
+			else begin = _bullets.erase(begin);	//那么销毁
 		}
 #pragma endregion
 #pragma region 人工控制逻辑段
-		this->GoKey(key, msecond);
-		if (key == KEY_ESC)	bGame = NULL;
-		for (i = 0,nums=0; i < gGINFO.player; i++)
-		{
-			xy = cT[i].GetOldXY();
-			nums += cT[i].GetInfo2();
-			this->CheckTank(xy, i + 1);
-			if (!cT[i].IsAlive()) {
-				bGame = NULL; break;
+		this->GoKey(key, msecond);				//调用按键函数
+		if (key == KEY_ESC)	bGame = NULL;		//按 ESC退出
+		for (i = 0, nums = 0; i < gGINFO.player; i++)
+		{										//循环玩家
+			xy = cT[i].GetOldXY();				//得到坐标
+			nums += cT[i].GetInfo2();			//得到分数
+			this->CheckTank(xy, i + 1);			//检查玩家
+			if (!cT[i].IsAlive()) {				//如果死亡
+				bGame = NULL; break;			//那么退出
 			}
 		}
 #pragma endregion
 #pragma region 结尾处判断
-		if (de存档游戏 > GameMode && nums > 99) bGame = NULL;
+		if (de自定义地图 > GameMode && nums > 99) bGame = NULL;
+		//暂停游戏代码
 		if (key == 'P') {
 			gGINFO.start = (unsigned int)(
 				GetTickCount64() - gGINFO.start);		//存储游戏用时
@@ -235,6 +236,7 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 #pragma endregion
 	return 0;
 }
+#pragma endregion
 
 /* 判断按键函数
 	用于按键判断	*/
@@ -245,7 +247,7 @@ void CCtrl::GoKey(byte& key, unsigned int msecond)
 	case 'W':case 'A':case 'S':case 'D':		//方向键移动坦克1
 
 		//如果	坦克速度>(游戏时间-坦克上次时间)则打印返回
-		if (cT[0].GetSpeed() > (int)(			//判断坦克移速
+		if (!KEY_DOWN(32) && cT[0].GetSpeed() > (int)(	//判断坦克移速
 			msecond - cT[0].mSecond))break;		//返回函数
 		cT[0].mSecond = msecond;				//设置坦克操作时间
 		tmap.TANKER = 0;						//标识地图为坦克NULL
@@ -256,7 +258,8 @@ void CCtrl::GoKey(byte& key, unsigned int msecond)
 			tmap.TANKER = 1;					//标识地图为玩家1
 			PM->SetMap(cT[0].GetOldXY(), tmap, true);
 			PV->PrintMap(cT[0]);				//打印新的坦克
-		} else {								//移动失败
+		}
+		else {								//移动失败
 			tmap.TANKER = 1;					//标识地图为坦克1
 			PM->SetMap(cT[0].GetOldXY(), tmap, true);
 		} break;
@@ -277,16 +280,15 @@ void CCtrl::GoKey(byte& key, unsigned int msecond)
 			tmap.TANKER = 2;					//标识地图为玩家2
 			PM->SetMap(cT[1].GetOldXY(), tmap, true);
 			PV->PrintMap(cT[1]);				//打印新的坦克
-		} else {
+		}
+		else {
 			tmap.TANKER = 2;					//标识地图为坦克2
 			PM->SetMap(cT[2].GetOldXY(), tmap, true);
 		} break;
-	//case KEY_ESC: bGame = 0x00; break;
+		//case KEY_ESC: bGame = 0x00; break;
 	default: break;
 	}
 }
-
-#pragma endregion
 
 #pragma endregion
 

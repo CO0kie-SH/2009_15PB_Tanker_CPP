@@ -10,7 +10,7 @@ using std::flush;
 class CView
 {
 public:
-	CBgm	PB;
+	CBgm	PB;	//∂®“ÂBGM
 
 	bool InitWindow(COORD& xy, bool isCursor);
 	void PrintPoint(COORD xy, const char* text, WORD color = 0x00);

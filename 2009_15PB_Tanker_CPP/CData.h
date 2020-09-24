@@ -70,7 +70,6 @@ private:
 #define COLOR_WHITE			0x0004 | 0x0002 |0x0001
 #define COLOR_H_WHITE		0x0008 | 0x0004 | 0x0002 |0x0001
 #pragma endregion
-
 #pragma region 字符串索引
 //定义地图属性
 #define	deStr河流 "≈"

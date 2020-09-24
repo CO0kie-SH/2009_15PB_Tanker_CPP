@@ -17,7 +17,7 @@ public:
 		this->_color = color;this->_blood = blood;
 		this->_team = team;
 		this->_speed = speed;this->_power = power;
-		this->mSecond = 0;
+		this->mSecond = 0;	this->_kills = 0;
 	};
 
 	byte GetDir(bool to0123 = true) {

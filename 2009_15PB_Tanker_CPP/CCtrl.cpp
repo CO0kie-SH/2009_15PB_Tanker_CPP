@@ -29,7 +29,7 @@ bool CCtrl::InitCMD()
 	if (PV->InitWindow(_maxXY, false) == false)
 		return false;
 	byte menu = 1;
-	PB.PlayMusic();
+	PV->PB.PlayMusic();
 	PV->PrintMap(); PV->PrintMap(menu);
 	do
 	{
@@ -53,6 +53,8 @@ bool CCtrl::InitCMD()
 			else {
 				if (this->DrawMap())
 					Go(de自定义地图);
+				else gGINFO.count = 8;
+				memset(map, 0, MAP_H* MAP_W);
 				PV->PrintMap();
 				gGINFO.menu = 0x00;
 			}
@@ -194,70 +196,73 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 #pragma endregion
 	} while (bGame);
 #pragma region 单局游戏结算
-	gGINFO.count = 7; PrintGInfo(msecond, 0x0C);
-	PV->PrintPoint({ MAP_W / 2 - 6,MAP_H / 2 },
-		"游戏结束！按Y退出！", 0x0C);
-	if (nums > 99 && de存档游戏 != GameMode)
-		printf_s("过关啦！下一关%d", Checkpoint + 1);
-	else if (key != KEY_ESC) {
-		for (i = 0; i < gGINFO.player; i++)
-			if (!cT[i].IsAlive())
-				printf_s("玩家%d死亡！", i + 1);
+	gGINFO.count = 0x07; PrintGInfo(msecond, 0x0C);		//标识游戏信息
+	PV->PrintPoint({ MAP_W / 2 - 6,MAP_H / 2 },			//打印游戏结束
+		"游戏结束！按Y退出！", 0x0C);					//打印游戏结束
+	if (nums > 99 && de存档游戏 != GameMode)			//判断是否过关
+		printf_s("过关啦！下一关%d", Checkpoint + 1);	//输出过关信息
+	else if (key != KEY_ESC) {							//如果玩家死亡
+		for (i = 0; i < gGINFO.player; i++)				//那么循环输出
+			if (!cT[i].IsAlive())						//循环判断存活
+				printf_s("玩家%d死亡！", i + 1);		//输出死亡信息
 	}
-	while (true) {
-		if ((i = _getch()) && KEY_DOWN('Y'))
-			if (i == 'Y' || i == 'y')
-				break;
-		Sleep(11);
+	while (true) {								//判断按键
+		if ((i = _getch()) && KEY_DOWN('Y'))	//如果按键
+			if (i == 'Y' || i == 'y')			//为 Y按键
+				break;							//则返回
+		Sleep(11);								//适当延迟
 	}
 	memset(map, 0, MAP_H * MAP_W);			//单局游戏结束初始化地图
-	PV->PrintMap(); gGINFO.menu = 0x00;		//初始化界面
-	this->_bullets.clear();					//清除子弹数组
-	if (nums > 99) return 1;
+	gGINFO.count = 7; gGINFO.menu = 0x00;	//初始化界面
+	PV->PrintMap(); _bullets.clear();		//清除子弹数组
+	if (nums > 99) return 0x01;
 #pragma endregion
 	return 0;
 }
 
+/* 判断按键函数
+	用于按键判断	*/
 void CCtrl::GoKey(byte& key, unsigned int msecond)
 {
-	CHARMAP tmap = { 0 };					//初始化地图参数
-	switch (key = gAPI.GetKey()) {			//通过API返回键值
-	case 'W':case 'A':case 'S':case 'D':	//方向键移动坦克1
+	CHARMAP tmap = { 0 };						//初始化地图参数
+	switch (key = gAPI.GetKey()) {				//通过API返回键值
+	case 'W':case 'A':case 'S':case 'D':		//方向键移动坦克1
+
 		//如果	坦克速度>(游戏时间-坦克上次时间)则打印返回
-		if (cT[0].GetSpeed() > (int)(msecond - cT[0].mSecond)) {
-			break;
-		}	cT[0].mSecond = msecond;
-		tmap.TANKER = 0;					//标识地图为坦克NULL
+		if (cT[0].GetSpeed() > (int)(			//判断坦克移速
+			msecond - cT[0].mSecond))break;		//返回函数
+		cT[0].mSecond = msecond;				//设置坦克操作时间
+		tmap.TANKER = 0;						//标识地图为坦克NULL
 		PM->SetMap(cT[0].GetOldXY(), tmap, true);
-		if (cT[0].TryMove(key) == true) {	//成功移动
-			PV->PrintMap(cT[0], true);		//清除旧的坦克
-			cT[0].Move();					//赋值新的坐标
-			tmap.TANKER = 1;				//标识地图为玩家1
+		if (cT[0].TryMove(key) == true) {		//成功移动
+			PV->PrintMap(cT[0], true);			//清除旧的坦克
+			cT[0].Move();						//赋值新的坐标
+			tmap.TANKER = 1;					//标识地图为玩家1
 			PM->SetMap(cT[0].GetOldXY(), tmap, true);
-			PV->PrintMap(cT[0]);			//打印新的坦克
-		}
-		else {
-			tmap.TANKER = 1;				//标识地图为坦克1
+			PV->PrintMap(cT[0]);				//打印新的坦克
+		} else {								//移动失败
+			tmap.TANKER = 1;					//标识地图为坦克1
 			PM->SetMap(cT[0].GetOldXY(), tmap, true);
 		} break;
-	case 'F': this->AddBullet(0x01); break;
-	case 'H': this->AddBullet(0x02); break;
-	case 'I':case 'J':case 'K':case 'L':	//方向键移动坦克2
+	case 'F': this->AddBullet(0x01); break;		//发射玩家1子弹
+	case 'R': this->AddBullet(0xFF); break;		//发射玩家1子弹
+	case 'H': this->AddBullet(0x02); break;		//发送玩家2子弹
+	case 'I':case 'J':case 'K':case 'L':		//方向键移动坦克2
+
 		//如果	坦克速度>(游戏时间-坦克上次时间)则打印返回
-		if (cT[1].GetSpeed() > (int)(msecond - cT[1].mSecond)) {
-			break;
-		}	cT[1].mSecond = msecond;
-		tmap.TANKER = 0;					//标识地图为坦克NULL
+		if (cT[1].GetSpeed() > (int)(			//判断坦克移速
+			msecond - cT[1].mSecond))break;		//返回函数
+		cT[1].mSecond = msecond;				//设置坦克操作时间
+		tmap.TANKER = 0;						//标识地图为坦克NULL
 		PM->SetMap(cT[1].GetOldXY(), tmap, true);
-		if (cT[1].TryMove(key) == true) {	//成功移动
-			PV->PrintMap(cT[1], true);		//清除旧的坦克
-			cT[1].Move();					//赋值新的坐标
-			tmap.TANKER = 2;				//标识地图为玩家2
+		if (cT[1].TryMove(key) == true) {		//成功移动
+			PV->PrintMap(cT[1], true);			//清除旧的坦克
+			cT[1].Move();						//赋值新的坐标
+			tmap.TANKER = 2;					//标识地图为玩家2
 			PM->SetMap(cT[1].GetOldXY(), tmap, true);
-			PV->PrintMap(cT[1]);			//打印新的坦克
-		}
-		else {
-			tmap.TANKER = 2;				//标识地图为坦克2
+			PV->PrintMap(cT[1]);				//打印新的坦克
+		} else {
+			tmap.TANKER = 2;					//标识地图为坦克2
 			PM->SetMap(cT[2].GetOldXY(), tmap, true);
 		} break;
 	//case KEY_ESC: bGame = 0x00; break;
@@ -275,6 +280,8 @@ void CCtrl::GoKey(byte& key, unsigned int msecond)
 	用于检测子弹是否能够生成	*/
 bool CCtrl::AddBullet(byte tid)
 {
+	bool isASTR = tid == 0xFF;				//传入跟踪弹
+	if (isASTR)	tid = 1;					//还原tid
 	CTanker& tank = this->cT[tid-1];		//传入坦克
 	CBullet att;							//定义子弹
 	COORD xy = tank.GetOldXY();				//获取坦克坐标
@@ -282,6 +289,7 @@ bool CCtrl::AddBullet(byte tid)
 		return false;						//函数返回
 	if(att.Init(xy, tank.GetDir(false),tank.GetTid())){
 		if (MoveBullet(att)) {				//初始化子弹后，尝试移动
+			if (tid <= 2) PV->PB.PlayOp();	//增加子弹音效
 			_bullets.push_back(att);		//如果成功，则加入变量
 			return true;					//函数返回
 		}
@@ -372,7 +380,7 @@ bool CCtrl::CheckTank(COORD& xy, byte tid)
 {
 	CHARMAP tmap;								//定义变量
 	SHORT x, y; int power;						//定义变量
-	byte bid = 0;								//定义变量
+	byte bid = 0, isTeam = NULL;				//定义变量
 	for (x = -1; x < 2; x++) {					//循环坦克体x
 		for (y = -1; y < 2; y++) {				//循环坦克体y
 			tmap = map[xy.Y + y][xy.X + x];		//获取该点坐标
@@ -383,15 +391,19 @@ bool CCtrl::CheckTank(COORD& xy, byte tid)
 					PM->SetMap(xy, tmap, true);	//设置地图
 					PV->PrintMap(cT[tid - 1]);	//打印坦克
 				}
-				if (cT[tid - 1].GetTeam() ==	//获取子弹强度
-					cT[bid - 1].GetTeam())		//获取子弹强度
-					power = cT[tid - 1].GetBlood();//获取子弹强度
+				isTeam = cT[tid - 1].GetTeam() ==
+					cT[bid - 1].GetTeam();		//判断队伍
+				if (isTeam)
+					power = cT[tid - 1].GetBlood();	//获取子弹强度
 				else
 					power = cT[tid - 1].GetBlood() -
 					cT[bid - 1].GetPower();		//获取子弹强度
-				if (power > 0)					//如果相减后血量>0
+				if (power > 0) {				//如果相减后血量>0
+					if (!isTeam)				//判断是否为敌方
+						PV->PB.PlayHit();		//则播放击中音效
 					cT[tid - 1].SetBlood(power);//设置血量
-				else {							//否则
+				} else {						//否则
+					PV->PB.PlayDeath();			//播放死亡音效
 					cT[tid - 1].SetBlood(0);	//设置血量0
 					cT[bid - 1].AddKills();		//增加杀敌数
 					gGINFO.count = 7;

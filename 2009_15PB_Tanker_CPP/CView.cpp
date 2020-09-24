@@ -111,6 +111,8 @@ void CView::PrintMap(byte menuIndex, bool err)
 	if (menuIndex == gGINFO.menu && !err)
 		return;
 	else gGINFO.menu = menuIndex;
+	if (gGINFO.count++ > 7)
+		PB.PlayOp();
 	byte x = MAP_W / 2 - 4, y = MAP_H / 2 - 4,
 		i, max = 6;
 	for (i = 1; i < max; i++)
@@ -126,17 +128,17 @@ void CView::PrintMap(byte menuIndex, bool err)
 bool CView::SaveGame(CTanker* Tanks)
 {
 	FILE* pFile = nullptr;
-	fopen_s(&pFile, ".//Debug//TankData.bin", "wb+");
+	fopen_s(&pFile, ".//Data//TankData.bin", "wb+");
 	if (pFile == nullptr) return false;;
 	fwrite(Tanks, sizeof(CTanker), 7, pFile);
 	fclose(pFile);	pFile = nullptr;
 
-	fopen_s(&pFile, ".//Debug//Map.bin", "wb+");
+	fopen_s(&pFile, ".//Data//Map.bin", "wb+");
 	if (pFile == nullptr) return false;
 	fwrite(map, MAP_W * MAP_H, 1, pFile);
 	fclose(pFile);	pFile = nullptr;
 
-	fopen_s(&pFile, ".//Debug//GInfo.bin", "wb+");
+	fopen_s(&pFile, ".//Data//GInfo.bin", "wb+");
 	if (pFile == nullptr) return false;
 	fwrite(&gGINFO, sizeof(gGINFO), 1, pFile);
 	fclose(pFile);	pFile = nullptr;
@@ -146,12 +148,12 @@ bool CView::SaveGame(CTanker* Tanks)
 bool CView::ReadGame(CTanker* Tanks)
 {
 	FILE* pFile = nullptr;
-	fopen_s(&pFile, ".//Debug//TankData.bin", "r");
+	fopen_s(&pFile, ".//Data//TankData.bin", "r");
 	if (pFile == nullptr) return false;
 	fread(Tanks, sizeof(CTanker), 7, pFile);
 	fclose(pFile);	pFile = nullptr;
 
-	fopen_s(&pFile, ".//Debug//Map.bin", "r");
+	fopen_s(&pFile, ".//Data//Map.bin", "r");
 	if (pFile == nullptr) return false;
 	fread(map, MAP_W * MAP_H, 1, pFile);
 	fclose(pFile);	pFile = nullptr;
@@ -160,7 +162,7 @@ bool CView::ReadGame(CTanker* Tanks)
 		for (byte y = 0; y < MAP_H; y++)
 			map[y][x].Bullet = false;
 
-	fopen_s(&pFile, ".//Debug//GInfo.bin", "r");
+	fopen_s(&pFile, ".//Data//GInfo.bin", "r");
 	if (pFile == nullptr) return false;
 	fread(&gGINFO, sizeof(gGINFO), 1, pFile);
 	fclose(pFile);	pFile = nullptr;

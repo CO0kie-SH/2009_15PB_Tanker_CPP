@@ -23,7 +23,7 @@ CData::CData()
 	memset(map, 0, MAP_H * MAP_W);
 	srand((unsigned int)time(NULL));
 	gGINFO.menu = 0x00;
-	gGINFO.levels = 0x02;
+	gGINFO.levels = 0x01;
 }
 
 CData::~CData()

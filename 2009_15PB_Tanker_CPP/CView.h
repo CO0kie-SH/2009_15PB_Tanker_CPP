@@ -6,12 +6,13 @@
 using std::cout;
 using std::endl;
 using std::flush;
-
+#include "CBgm.h"
 class CView
 {
 public:
 	CView();
 	~CView();
+	CBgm	PB;
 
 	bool InitWindow(COORD& xy, bool isCursor);
 	void PrintPoint(COORD xy, const char* text, WORD color = 0x00);

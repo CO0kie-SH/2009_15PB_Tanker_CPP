@@ -158,7 +158,7 @@ typedef struct _CHARMAP {
 //定义游戏世界参数
 typedef struct _GAMEINFO {			//全局游戏信息
 	byte player = 0x01;				//记录菜单信息
-	byte count = 0x08;				//记录菜单信息
+	byte count = 0x07;				//记录菜单信息
 	byte menu = 0x01;				//记录菜单信息
 	byte levels = 0x00;				//记录关卡
 	time_t now = 0x00;				//声明time_t类型变量

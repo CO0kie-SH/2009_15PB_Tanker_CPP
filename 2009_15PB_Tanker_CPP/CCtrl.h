@@ -3,7 +3,6 @@
 using std::list;
 #include "CView.h"
 #include "CMap.h"
-#include "CBgm.h"
 
 class CCtrl
 {
@@ -27,7 +26,6 @@ private:
 private:
 	CView*	PV;
 	CMap*	PM;
-	CBgm	PB;
 	COORD	_maxXY;
 	byte	_tanks = 0x04;
 	list<CBullet> _bullets;

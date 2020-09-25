@@ -13,10 +13,11 @@ void Init()
     system("mode con cols=30 lines=15");
     std::cout << buf << endl;
     cout << "\n\n加载进度：\n";
-    for (size_t i = 0; i < X; i++)
+    for (int i = X; i; --i)
     {
         cout << "■" << std::flush;
-        Sleep(100);
+        if (KEY_UP(32))
+            Sleep(100);
     }
     cout << "\n加载完毕..." << std::flush;
     Sleep(1000);

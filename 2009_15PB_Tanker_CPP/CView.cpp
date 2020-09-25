@@ -1,6 +1,6 @@
 #include "CView.h"
 
-
+/*初始化窗口*/
 bool CView::InitWindow(COORD& xy, bool isCursor)
 {
 	CONSOLE_CURSOR_INFO cursor = { 1,isCursor };
@@ -19,6 +19,7 @@ bool CView::InitWindow(COORD& xy, bool isCursor)
 	return (bool)SetConsoleTitleA(INFOMenu[0]);
 }
 
+/*绘制窗口函数*/
 void CView::PrintPoint(COORD xy, const char* text, WORD color)
 {
 	if (color != 0x00)							//如果传入颜色
@@ -30,6 +31,7 @@ void CView::PrintPoint(COORD xy, const char* text, WORD color)
 		SetConsoleTextAttribute(gOUTPUT, 0x0F);	//还原画刷
 }
 
+/*刷新窗口、绘画地图*/
 void CView::PrintMap()
 {
 	unsigned short x = MAP_W + 1, y = 0;
@@ -52,6 +54,7 @@ void CView::PrintMap()
 	cout << endl;
 }
 
+/*重载绘画地图点*/
 void CView::PrintMap(CHARMAP tmap)
 {
 	unsigned char index = 0x00;		//初始化打印索引
@@ -69,6 +72,7 @@ void CView::PrintMap(CHARMAP tmap)
 	SetConsoleTextAttribute(gOUTPUT, 0x0F);
 }
 
+/*重载绘画坦克*/
 void CView::PrintMap(CTanker& that, bool clean)
 {
 	if (!that.IsAlive()) return;
@@ -94,6 +98,7 @@ void CView::PrintMap(CTanker& that, bool clean)
 		}
 }
 
+/*重载绘制游戏信息*/
 void CView::PrintMap(byte menuIndex, bool err)
 {
 	if (menuIndex == gGINFO.menu && !err)
@@ -113,46 +118,48 @@ void CView::PrintMap(byte menuIndex, bool err)
 		err ? 0x04 : 0x0F);
 }
 
+/*保存游戏*/
 bool CView::SaveGame(CTanker* Tanks)
 {
-	FILE* pFile = nullptr;
-	fopen_s(&pFile, ".//Data//TankData.bin", "wb+");
-	if (pFile == nullptr) return false;;
-	fwrite(Tanks, sizeof(CTanker), 7, pFile);
-	fclose(pFile);	pFile = nullptr;
+	FILE* pFile = nullptr;						//定义文件指针变量
+	fopen_s(&pFile, ".//Data//TankData.bin", "wb+");	//获取文件指针
+	if (pFile == nullptr) return false;			//判断打开文件失败
+	fwrite(Tanks, sizeof(CTanker), 7, pFile);	//写入坦克数组内容
+	fclose(pFile);	pFile = nullptr;			//关闭文件指针
 
-	fopen_s(&pFile, ".//Data//Map.bin", "wb+");
-	if (pFile == nullptr) return false;
-	fwrite(map, MAP_W * MAP_H, 1, pFile);
-	fclose(pFile);	pFile = nullptr;
+	fopen_s(&pFile, ".//Data//Map.bin", "wb+");	//获取文件指针
+	if (pFile == nullptr) return false;			//判断打开文件失败
+	fwrite(map, MAP_W * MAP_H, 1, pFile);		//写入地图数组内容
+	fclose(pFile);	pFile = nullptr;			//关闭文件指针
 
-	fopen_s(&pFile, ".//Data//GInfo.bin", "wb+");
-	if (pFile == nullptr) return false;
-	fwrite(&gGINFO, sizeof(gGINFO), 1, pFile);
-	fclose(pFile);	pFile = nullptr;
+	fopen_s(&pFile, ".//Data//GInfo.bin", "wb+");//获取文件指针
+	if (pFile == nullptr) return false;			//判断打开文件失败
+	fwrite(&gGINFO, sizeof(gGINFO), 1, pFile);	//写入游戏信息内容
+	fclose(pFile);	pFile = nullptr;			//关闭文件指针
 	return true;
 }
 
+/*读取游戏*/
 bool CView::ReadGame(CTanker* Tanks)
 {
-	FILE* pFile = nullptr;
-	fopen_s(&pFile, ".//Data//TankData.bin", "r");
-	if (pFile == nullptr) return false;
-	fread(Tanks, sizeof(CTanker), 7, pFile);
-	fclose(pFile);	pFile = nullptr;
+	FILE* pFile = nullptr;						//定义文件指针变量
+	fopen_s(&pFile, ".//Data//TankData.bin", "r");	//获取文件指针
+	if (pFile == nullptr) return false;			//如果失败，则返回
+	fread(Tanks, sizeof(CTanker), 7, pFile);	//读取坦克数组内容
+	fclose(pFile);	pFile = nullptr;			//关闭文件指针
 
-	fopen_s(&pFile, ".//Data//Map.bin", "r");
-	if (pFile == nullptr) return false;
-	fread(map, MAP_W * MAP_H, 1, pFile);
-	fclose(pFile);	pFile = nullptr;
+	fopen_s(&pFile, ".//Data//Map.bin", "r");	//获取文件指针
+	if (pFile == nullptr) return false;			//如果失败，则返回
+	fread(map, MAP_W * MAP_H, 1, pFile);		//读取地图数组内容
+	fclose(pFile);	pFile = nullptr;			//关闭文件指针
 
-	for (byte x = 0; x < MAP_W; x++)
-		for (byte y = 0; y < MAP_H; y++)
-			map[y][x].Bullet = false;
+	for (byte x = 0; x < MAP_W; x++)			//循环地图
+		for (byte y = 0; y < MAP_H; y++)		//循环地图
+			map[y][x].Bullet = false;			//将子弹清除
 
-	fopen_s(&pFile, ".//Data//GInfo.bin", "r");
-	if (pFile == nullptr) return false;
-	fread(&gGINFO, sizeof(gGINFO), 1, pFile);
-	fclose(pFile);	pFile = nullptr;
+	fopen_s(&pFile, ".//Data//GInfo.bin", "r");	//获取文件指针
+	if (pFile == nullptr) return false;			//如果失败，则返回
+	fread(&gGINFO, sizeof(gGINFO), 1, pFile);	//读取游戏信息内容
+	fclose(pFile);	pFile = nullptr;			//关闭文件指针
 	return true;
 }

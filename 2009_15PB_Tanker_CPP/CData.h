@@ -48,6 +48,7 @@ private:
 
 //定义热键
 #define KEY_ESC 27
+#define KEY_ADD 187
 
 //定义游戏状态
 #define de单人游戏闯关 0x01

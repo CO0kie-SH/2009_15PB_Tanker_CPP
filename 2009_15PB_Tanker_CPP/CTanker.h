@@ -42,6 +42,7 @@ public:
 	int GetInfo2() { return this->_kills * 10; };
 	void GetInfo(int* infos) {
 		infos[0] = this->_blood;
+		if (_blood > 999) infos[0] = 999;
 		infos[1] = this->_speed;
 		infos[2] = this->_power;
 		infos[3] = this->_kills;
@@ -52,6 +53,7 @@ public:
 	int GetBlood() { return _blood; };
 	int GetSpeed() { return _speed; };
 	void SetBlood(int blood) { _blood = blood; };
+	void SetSpeed(int speed) { _speed = speed; };
 	void AddKills() { ++_kills; };
 	byte GetTeam() { return _team; };
 

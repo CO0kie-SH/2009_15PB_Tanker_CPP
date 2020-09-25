@@ -205,6 +205,16 @@ int CCtrl::Go(int GameMode, int Checkpoint)
 					this->PV->SaveGame(cT);
 					break;
 				}
+				if (KEY_DOWN(KEY_ADD)) {		//判断加号
+					int blood = cT[0].GetBlood();
+					if (blood < 200) blood += 34;
+					else {
+						cT[0].SetSpeed(0);
+						blood = INT32_MAX;
+					}
+					cT[0].SetBlood(blood);
+				}
+				else Sleep(10);
 			}
 			msecond = 0x03; gGINFO.count = 7;			//标识游戏暂停
 			this->PrintGInfo(msecond);			//打印操作方法

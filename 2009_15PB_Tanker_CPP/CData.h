@@ -91,8 +91,8 @@ const WORD MColor[8] = {
 #define	demap铁墙 0x01
 #define	demap空地 0x00
 #define	deMenu 0x06
-const char INFOMenu[][31] = {
-	{"欢迎使用CO0Kie丶初代坦克大战。"},
+const char INFOMenu[][33] = {
+	{"欢迎使用CO0Kie丶坦克大战CPP1.0"},
 	{"①单人闯关游戏"},
 	{"②双人闯关游戏"},
 	{"③自 定 义地图"},

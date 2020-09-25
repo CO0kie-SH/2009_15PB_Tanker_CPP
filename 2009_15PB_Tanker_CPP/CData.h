@@ -33,6 +33,7 @@ private:
 
 };
 
+
 #pragma region 注册宏定义
 //判断指定的按键是否按下
 #define KEY_DOWN(vk_code) ((GetAsyncKeyState(vk_code)&0x8000)?1:0)
